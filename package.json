@@ -13,9 +13,11 @@
   },
   "main": "background.js",
   "dependencies": {
+    "autoprefixer": "^10.4.0",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
     "electron": "^16.0.5",
+    "postcss": "^8.4.5",
     "vue": "^3.0.0"
   },
   "devDependencies": {
