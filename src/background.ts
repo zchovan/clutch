@@ -16,7 +16,11 @@ async function createWindow() {
     width: 1920,
     height: 1080,
     title: "Clutch",
-    icon: './icon.png',
+    icon: './public/clutch_icon.png',
+    // transparent: true, 
+    frame: false,
+    // titleBarStyle: 'hidden',
+    // titleBarOverlay: true,
     webPreferences: {
       
       // Use pluginOptions.nodeIntegration, leave this alone
