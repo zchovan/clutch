@@ -18,11 +18,11 @@ async function createWindow() {
     title: "Clutch",
     icon: './public/clutch_icon.png',
     // transparent: true, 
-    frame: false,
+    // frame: false,
     // titleBarStyle: 'hidden',
     // titleBarOverlay: true,
     webPreferences: {
-      
+      webSecurity: false,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,

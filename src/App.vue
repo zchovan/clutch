@@ -1,56 +1,71 @@
 <template>
-
-  <div class="h-screen w-screen flex">
-    <div class="h-screen flex-none w-18 m-0 p-0 bg-main">
-      <svg class="m-2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-car-clutch" width="52" height="52" viewBox="0 0 24 24">
-        <path d="M10 18.84L14 20.7V23L8 20V14H5V10H8V4L14 1V3.3L10 5.16V18.84M19 10H15V5.41L12 6.8V17.2L15 18.6V14H19V10Z" />
-      </svg>
-      <div class="rotate-90 ml-8">
-        <span class="text-secondary">Clutch</span>
-      </div>
-    </div>
-    <div class="h-screen flex-none w-64 min-w-64 m-0 p-0 bg-main text-secondary">
-        <nav class="mt-2">
-          <a href="#" class="block py-1 px-2 text-left">All torrents (14)</a>
-          <a href="#" class="block py-1 px-2 text-left">Downloading (1)</a>
-          <a href="#" class="block py-1 px-2 text-left">Completed (13)</a>
-          <a href="#" class="block py-1 px-2 text-left">Active (1)</a>
-          <a href="#" class="block py-1 px-2 text-left">Inactive (0)</a>
-          <a href="#" class="block py-1 px-2 text-left">Stopped (0)</a>
-          <a href="#" class="block py-1 px-2 text-left">Error (0)</a>
-          <a href="#" class="block py-1 px-2 text-left">Waiting (0)</a>
-        </nav>
-      </div>
-    <div class="flex-none">
-      <div>
-        <toolbar/>
-        <torrent-list/>
-      </div>
-      <!-- <div class="main h-1/2">
-        <toolbar/>
-        <torrent-list/>
-      </div> 
-    
-      <div class="bottom h-1/2">
-        <h1>bottom</h1>
-      </div> -->
-    </div>
-  </div>
-  
-      
-      
+  <sidebar/>
+  <!-- route outlet -->
+  <!-- component matched by the route will render here -->
+  <router-view></router-view>
+  <!-- <torrents/>                   -->
 </template>
 
 <script>
-import Toolbar from './components/Toolbar.vue'
-import TorrentList from './components/TorrentList.vue'
+import Sidebar from './components/Sidebar.vue'
+// import Torrents from './components/Torrents/Torrents.vue'
+import axios from './middleware/api_client'
+
 
 export default {
   name: 'App',
-  components: {
-    Toolbar,
-    TorrentList
-  }
+  data() {
+    return {
+      torrents: "",
+      headers: {}
+    }
+  },
+  components: { 
+    Sidebar, 
+    // Torrents,
+  },
+  mounted() { 
+    this.csrf_token()
+  },
+  methods: {
+    async csrf_token() {
+      console.log("init");
+      axios
+        .post("/",{})
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch((error) => {
+          if (error.response.status == 409) {
+            console.log(error.response.headers["x-transmission-session-id"])
+            this.headers = {"x-transmission-session-id": error.response.headers["x-transmission-session-id"]};
+          }
+        }); 
+    },  
+    async getTorrents() {        
+      console.log("Gettorrents");
+      console.log(this.headers)
+      axios({
+        method: 'post',
+        url: '/',
+        data: {
+            "arguments": {
+                "fields": [ "id", "name", "totalSize", "labels" ],
+                "ids": [1]
+            },
+            "method": "torrent-get",
+            "tag": 39693
+        },
+        headers: this.headers
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error );      
+      })
+    }
+  }  
 }
 </script>
 

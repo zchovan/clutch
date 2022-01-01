@@ -1,7 +1,0 @@
-class Torrent {
-    constructor() {
-        
-    }
-
-    
-}

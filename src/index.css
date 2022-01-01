@@ -3,5 +3,10 @@
 @tailwind utilities;
 
 body {
-    -webkit-app-region: drag
+    /* -webkit-app-region: drag */
+}
+
+@font-face {
+    font-family: 'roboto';
+    src: url('../public/fonts/Roboto-Regular.ttf');
 }

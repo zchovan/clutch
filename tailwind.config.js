@@ -9,7 +9,12 @@ module.exports = {
       'main': '#26344F',
       'secondary': '#FBFBFB',
     },
+    fontFamily: {
+      'roboto': ['roboto']
+    }, 
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
