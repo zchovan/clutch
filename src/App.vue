@@ -1,15 +1,15 @@
 <template>
-  <sidebar/>
-  <!-- route outlet -->
-  <!-- component matched by the route will render here -->
-  <router-view></router-view>
-  <!-- <torrents/>                   -->
+  <div class="relative h-screen flex">
+    <sidebar />
+    <!-- route outlet -->
+    <!-- component matched by the route will render here -->
+    <router-view />
+  </div>  
 </template>
 
 <script>
 import Sidebar from './components/Sidebar.vue'
-// import Torrents from './components/Torrents/Torrents.vue'
-import axios from './middleware/api_client'
+import axios from './middleware/api-client'
 
 
 export default {
@@ -21,14 +21,13 @@ export default {
     }
   },
   components: { 
-    Sidebar, 
-    // Torrents,
+    Sidebar    
   },
   mounted() { 
     this.csrf_token()
   },
   methods: {
-    async csrf_token() {
+    async csrf_token() {           
       console.log("init");
       axios
         .post("/",{})
