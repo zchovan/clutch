@@ -1,5 +1,11 @@
 # clutch
 
+Clutch is an electron+vue remote frontend for [Transmission](https://github.com/transmission/transmission).
+
+Still in heavy development, not even alpha yet.
+
+
+
 ## Project setup
 ```
 yarn install
@@ -22,7 +28,3 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
-
-https://icon-icons.com/icon/car-clutch/136822
