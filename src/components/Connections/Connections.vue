@@ -1,24 +1,14 @@
 <template>    
-  <div class="flex-1 w-full">    
-    <div>
+  <div class="flex w-full">
+    <div class="w-1/3 min-w-64 h-screen bg-primary-light text-gray">
       <h1>connections</h1>
+      <connection-list-item 
+        v-for="connection in connections()" 
+        :name="connection.name" 
+        :key="connection.name" 
+      />
     </div>
-    <div>
-      <select
-        name="selected_connection"
-        id="selected_connection"
-        v-model="selected_connection"
-      >
-        <option
-          v-for="connection in connections()"
-          :value="connection"
-          :key="connection.name"
-        >
-          {{ connection.name }}
-        </option>
-      </select>          
-    </div>
-    <div class="flex-1 justify-items-center content-center">
+    <div class="flex-1 justify-items-center content-center text-main bg-primary-lighter text-gray-light">
       <form 
         class="grid grid-cols-2 w-3/5" 
         action="" 
@@ -82,9 +72,13 @@
 </template>
 
 <script>
+import ConnectionListItem from './ConnectionListItem.vue'
 
 export default {
   name: 'Connections',
+  components: {
+    ConnectionListItem
+  },
   data() {
     return {    
       selected_connection: {},  

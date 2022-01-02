@@ -4,6 +4,10 @@ Clutch is an electron+vue remote frontend for [Transmission](https://github.com/
 
 Still in heavy development, not even alpha yet.
 
+## Todo:
+* finish up UI
+* tests
+
 
 
 ## Project setup

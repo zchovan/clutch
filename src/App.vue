@@ -40,30 +40,7 @@ export default {
             this.headers = {"x-transmission-session-id": error.response.headers["x-transmission-session-id"]};
           }
         }); 
-    },  
-    async getTorrents() {        
-      console.log("Gettorrents");
-      console.log(this.headers)
-      axios({
-        method: 'post',
-        url: '/',
-        data: {
-            "arguments": {
-                "fields": [ "id", "name", "totalSize", "labels" ],
-                "ids": [1]
-            },
-            "method": "torrent-get",
-            "tag": 39693
-        },
-        headers: this.headers
-      })
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error );      
-      })
-    }
+    }    
   }  
 }
 </script>

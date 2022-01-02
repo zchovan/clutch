@@ -1,23 +1,53 @@
 <template>
-    <div class="w-64 min-w-64 h-screen bg-main text-secondary">
-        <nav class="mt-2">
-          <a href="#" class="block py-1 px-2 text-left">All torrents (14)</a>
-          <a href="#" class="block py-1 px-2 text-left">Downloading (1)</a>
-          <a href="#" class="block py-1 px-2 text-left">Completed (13)</a>
-          <a href="#" class="block py-1 px-2 text-left">Active (1)</a>
-          <a href="#" class="block py-1 px-2 text-left">Inactive (0)</a>
-          <a href="#" class="block py-1 px-2 text-left">Stopped (0)</a>
-          <a href="#" class="block py-1 px-2 text-left">Error (0)</a>
-          <a href="#" class="block py-1 px-2 text-left">Waiting (0)</a>
-        </nav>
-      </div>
+  <div class="w-1/3 min-w-64 h-screen bg-primary-light text-gray">
+    <torrent-menu-item
+      v-for="torrent in torrents()" 
+      :name="torrent.name" 
+      :key="torrent.name" 
+    />
+  </div>
 </template>
 
 <script>
+import TorrentMenuItem from './TorrentMenuItem.vue'
+// import axios from './middleware/api-client'
+
 export default {
+  components: { TorrentMenuItem },
   name: 'TorrentsMenu',
-  props: {
-    msg: String
+  methods: {
+    torrents: function() {      
+      return [
+        {
+          name: 'torrent_1'
+        },
+        {
+          name: 'torrent_2'
+        },
+        {
+          name: 'torrent_3'
+        }
+      ]
+      // axios({
+      //   method: 'post',
+      //   url: '/',
+      //   data: {
+      //       "arguments": {
+      //           "fields": [ "id", "name", "totalSize", "labels" ],
+      //           "ids": [1]
+      //       },
+      //       "method": "torrent-get",
+      //       "tag": 39693
+      //   },
+      //   headers: this.headers
+      // })
+      // .then(function(response) {
+      //   console.log(response);
+      // })
+      // .catch(function(error) {
+      //   console.log(error );      
+      // })
+    }
   }
 }
 </script>
