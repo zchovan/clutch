@@ -3,9 +3,11 @@
     <div class="w-1/3 min-w-64 h-screen bg-primary-light text-gray">
       <h1>connections</h1>
       <connection-list-item 
-        v-for="connection in connections()" 
+        v-for="connection in connections"
         :name="connection.name" 
-        :key="connection.name" 
+        :key="connection.name"
+        @click="selectConnectionByName(connection.name)"
+        @connection-delete="getConnections"
       />
     </div>
     <div class="flex-1 justify-items-center content-center text-main bg-primary-lighter text-gray-light">
@@ -51,7 +53,7 @@
         >
         <label for="password">Password</label>
         <input
-          type="text"
+          type="password"
           name="password"
           id="password"
           v-model="password"
@@ -73,6 +75,7 @@
 
 <script>
 import ConnectionListItem from './ConnectionListItem.vue'
+import Connection from '../../models/connection';
 
 export default {
   name: 'Connections',
@@ -80,38 +83,65 @@ export default {
     ConnectionListItem
   },
   data() {
-    return {    
-      selected_connection: {},  
+    return {
+      connections: {},
+      selected_connection: {},
       name: "Connection name",
       host: "localhost",
       port: 9091,
       auth_required: false,
       username: "",
       password: "",
-      rpc_path: "/transmission/rpc"
+      rpc_path: "/transmission/rpc",
     }
   },
-  methods: {
-    saveConnection() {                          
-        let conns = this.$storage.get('connections');
-        conns.push({
-          name: this.name,
-          host: this.host,
-          port: this.port,
-          auth_required: this.auth_required,
-          username: this.username,
-          password: this.password,
-          rpc_path: this.rpc_path
-        });
-        this.$storage.delete('connections');
-        this.$storage.set('connections', conns);            
-      console.log(this.$storage.get('connections'));
-    },
-    connections: function () {      
+  watch: {
+    connections: function() {
       if (this.$storage.has('connections')) {
         return this.$storage.get('connections');
+      }
+    }
+  },
+  mounted: function() {
+    this.getConnections();
+  },
+  methods: {
+    selectConnectionByName(name) {
+      this.selected_connection = this.$storage.get('connections').filter(conn => conn.name === name)
+      console.log(this.selected_connection);
+    },
+    saveConnection() {                          
+      let connections = this.$storage.get('connections');
+      let new_connection = new Connection(
+        this.name,
+        this.host,
+        this.password,
+        this.auth_required,
+        this.username,
+        this.password,
+        this.rpc_path
+      );
+
+      if (connections.filter(conn => conn.name !== new_connection.name)) {
+        connections.push(new_connection)
+        this.$storage.delete('connections');
+        this.$storage.set('connections', connections);
+        this.connections = connections;
+        console.log(this.$storage.get('connections'));
       } else {
-        return "nope";
+        console.error("connection name already exists")
+      }
+    },
+    setConnections() {
+      if (this.$storage.has('connections')) {
+        this.connections = this.$storage.get('connections');
+      }
+    },
+    getConnections() {
+      if (this.$storage.has('connections')) {
+        this.connections = this.$storage.get('connections');
+      } else {
+        this.connections = {};
       }
     }
   }

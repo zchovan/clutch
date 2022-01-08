@@ -1,14 +1,13 @@
 import { createApp } from 'vue'
-import { createStore } from 'vuex'
 import App from './App.vue'
 import '../dist_electron/index.css'
 import Torrents from './components/Torrents/Torrents.vue'
 import Connections from './components/Connections/Connections.vue'
-import { createRouter, createWebHashHistory} from 'vue-router'
-import Store from 'electron-store'
-import State from './models/state'
+import { createRouter, createWebHashHistory } from 'vue-router'
+// import Store from 'electron-store'
+import { vuexStore, key, store } from './util/vuexStore'
 
-const store = new Store();
+
 const routes = [
     { path: '/', component: Torrents },
     { path: '/connections', component: Connections },
@@ -20,21 +19,11 @@ const router = createRouter({
 })
 
 
+
 const app = createApp(App);
-const vuexStore = createStore({
-  state () {
-    return {
-      count: 0
-    }
-  },
-  mutations: {
-    increment (state:State) {
-      state.count++
-    }
-  }
-});
+
 app.use(router);
-app.use(vuexStore);
+app.use(vuexStore, key);
 
 app.config.globalProperties.$storage = store;
 app.mount('#app');

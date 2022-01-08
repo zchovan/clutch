@@ -10,7 +10,7 @@
 
 <script>
 import TorrentMenuItem from './TorrentMenuItem.vue'
-// import axios from './middleware/api-client'
+// import axios from './util/api-client'
 
 export default {
   components: { TorrentMenuItem },

@@ -1,8 +1,17 @@
+import Connection from "./connection";
+
 /**
  * 
  * @export
- * @interface Connection
+ * @interface State
  */
- export default interface Connection {
-    count: number
+ export interface State {
+    status: Status,
+    currentConnection: Connection
+}
+
+export enum Status {
+    NOT_CONNECTED,
+    CONNECTING,
+    CONNECTED
 }

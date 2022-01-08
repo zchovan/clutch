@@ -10,6 +10,12 @@
 
 export default {
   name: 'TorrentMenuItem',
-  props: ['name']      
+  props: {
+    'name': {
+      type: String,
+      default: '',
+      required: true
+    }
+  }
 }
 </script>
