@@ -1,6 +1,6 @@
 # clutch
 
-Clutch is an electron+vue remote frontend for [Transmission](https://github.com/transmission/transmission).
+Clutch ~~is~~ will be an electron+vue remote frontend for [Transmission](https://github.com/transmission/transmission).
 
 Still in heavy development, not even alpha yet.
 
