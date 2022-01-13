@@ -1,7 +1,7 @@
 <template>
   <div class="w-1/3 min-w-64 h-screen bg-primary-light text-gray">
     <torrent-menu-item
-      v-for="torrent in torrents()" 
+      v-for="torrent in torrents"
       :name="torrent.name" 
       :key="torrent.name" 
     />
@@ -10,43 +10,62 @@
 
 <script>
 import TorrentMenuItem from './TorrentMenuItem.vue'
-// import axios from './util/api-client'
+import axios from "axios";
 
 export default {
   components: { TorrentMenuItem },
   name: 'TorrentsMenu',
+  data() {
+    return {
+      torrents: [],
+    }
+  },
+  mounted() {
+    this.getTorrents()
+  },
+  // watch: {
+  //   torrents() {
+  //     this.getTorrents();
+  //   }
+  // },
   methods: {
-    torrents: function() {      
-      return [
-        {
-          name: 'torrent_1'
+    getTorrents() {
+      let conn = this.$store.getters.getCurrentConnection;
+      let axios_instance;
+      if (conn.auth_required) {
+        axios_instance = axios.create({
+          baseURL: 'http://' + conn.url + ':' + conn.port,
+          method: 'POST',
+          headers: {
+            'x-transmission-session-id': conn.csrf_token
+          },
+          auth: {
+            username: conn.username,
+            password: conn.password
+          },
+        });
+      } else {
+        axios_instance = axios.create({
+          baseURL: conn.url,
+          method: 'POST',
+          headers: {
+            'x-transmission-session-id': conn.csrf_token
+          }
+        });
+      }
+
+      axios_instance.post(conn.rpc_path, {
+        'method': 'torrent-get',
+        'arguments': {
+          'fields': [ 'id', 'name' ],
         },
-        {
-          name: 'torrent_2'
-        },
-        {
-          name: 'torrent_3'
-        }
-      ]
-      // axios({
-      //   method: 'post',
-      //   url: '/',
-      //   data: {
-      //       "arguments": {
-      //           "fields": [ "id", "name", "totalSize", "labels" ],
-      //           "ids": [1]
-      //       },
-      //       "method": "torrent-get",
-      //       "tag": 39693
-      //   },
-      //   headers: this.headers
-      // })
-      // .then(function(response) {
-      //   console.log(response);
-      // })
-      // .catch(function(error) {
-      //   console.log(error );      
-      // })
+      }).then((response) => {
+        console.log('torrents gotten');
+        console.log(response.data.arguments.torrents);
+        this.torrents = response.data.arguments.torrents;
+      }).catch((error) => {
+        console.log(error);
+      });
     }
   }
 }

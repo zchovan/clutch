@@ -1,40 +1,62 @@
 <template>
   <div class="connection-list-item block">
-    <div class="w-full flex">
+    <div class="w-auto flex bg-primary-lighter hover:bg-primary-light-hover p-2 m-2 rounded">
       <span>{{ name }}</span>
+      <ShieldCheckIcon
+        v-if="authReq"
+        class="fill-secondary w-6 h-6"
+      />
       <XCircleIcon
         class="fill-secondary w-6 h-6"
         @click="deleteConnectionByName(name)"
+      />
+      <LoginIcon
+        class="fill-secondary w-6 h-6"
+        @click="connect(name)"
       />
     </div>
   </div>
 </template>
 
 <script>
-
-import {  XCircleIcon } from '@heroicons/vue/solid'
+import { XCircleIcon, LoginIcon, ShieldCheckIcon } from '@heroicons/vue/solid'
 
 export default {
   name: 'ConnectionListItem',
   components: {
-    XCircleIcon
+    XCircleIcon,
+    LoginIcon,
+    ShieldCheckIcon
   },
-  emits: ['connection-delete'],
   props: {
     'name': {
       type: String,
       default: '',
       required: true
+    },
+    'authReq': {
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    'host': {
+      type: String,
+      default: '',
+      required: true
+    },
+    'port': {
+      type: Number,
+      default: 0,
+      required: true
     }
   },
   methods: {
     deleteConnectionByName(name) {
-      let connections = this.$storage.get('connections');
-      let new_connections = connections.filter(conn => conn.name !== name);
-      this.$storage.delete('connections');
-      this.$storage.set('connections', new_connections);
-      this.$emit('connection-delete');
+      this.$store.dispatch('deleteConnection', { name })
     },
+    connect(name) {
+      this.$store.dispatch('connect', { name });
+    }
   }
 }
 </script>

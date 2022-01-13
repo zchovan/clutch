@@ -6,6 +6,9 @@
         v-for="connection in connections"
         :name="connection.name" 
         :key="connection.name"
+        :auth-req="connection.auth_required"
+        :host="connection.host"
+        :port="connection.port"
         @click="selectConnectionByName(connection.name)"
         @connection-delete="getConnections"
       />
@@ -97,9 +100,7 @@ export default {
   },
   watch: {
     connections: function() {
-      if (this.$storage.has('connections')) {
-        return this.$storage.get('connections');
-      }
+      return this.$store.getters.getAllConnections;
     }
   },
   mounted: function() {
@@ -107,42 +108,26 @@ export default {
   },
   methods: {
     selectConnectionByName(name) {
-      this.selected_connection = this.$storage.get('connections').filter(conn => conn.name === name)
+      const conns = this.$store.getters.getAllConnections;
+      this.selected_connection = conns.find(conn => conn.name === name)
       console.log(this.selected_connection);
     },
-    saveConnection() {                          
-      let connections = this.$storage.get('connections');
+    saveConnection() {
       let new_connection = new Connection(
         this.name,
         this.host,
-        this.password,
+        this.port,
+        this.rpc_path,
         this.auth_required,
         this.username,
-        this.password,
-        this.rpc_path
+        this.password
       );
 
-      if (connections.filter(conn => conn.name !== new_connection.name)) {
-        connections.push(new_connection)
-        this.$storage.delete('connections');
-        this.$storage.set('connections', connections);
-        this.connections = connections;
-        console.log(this.$storage.get('connections'));
-      } else {
-        console.error("connection name already exists")
-      }
+      this.$store.commit('addConnection', new_connection);
     },
-    setConnections() {
-      if (this.$storage.has('connections')) {
-        this.connections = this.$storage.get('connections');
-      }
-    },
+
     getConnections() {
-      if (this.$storage.has('connections')) {
-        this.connections = this.$storage.get('connections');
-      } else {
-        this.connections = {};
-      }
+      this.connections = this.$store.getters.getAllConnections;
     }
   }
 }

@@ -9,7 +9,6 @@
 
 <script>
 import Sidebar from './components/Sidebar.vue'
-import axios from './util/api-client'
 
 export default {
   name: 'App',
@@ -22,24 +21,11 @@ export default {
   components: { 
     Sidebar    
   },
-  mounted() { 
-    this.csrf_token()
+  mounted() {
+    this.$store.dispatch('resetCurrentConnection');
   },
   methods: {
-    async csrf_token() {           
-      console.log("init");
-      axios
-        .post("/",{})
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch((error) => {
-          if (error.response.status == 409) {
-            console.log(error.response.headers["x-transmission-session-id"])
-            this.headers = {"x-transmission-session-id": error.response.headers["x-transmission-session-id"]};
-          }
-        }); 
-    }    
+
   }  
 }
 </script>

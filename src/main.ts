@@ -5,8 +5,7 @@ import Torrents from './components/Torrents/Torrents.vue'
 import Connections from './components/Connections/Connections.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 // import Store from 'electron-store'
-import { vuexStore, key, store } from './util/vuexStore'
-
+import { store, key } from './vuex/store'
 
 const routes = [
     { path: '/', component: Torrents },
@@ -18,12 +17,10 @@ const router = createRouter({
     routes, // short for `routes: routes`
 })
 
-
-
 const app = createApp(App);
 
 app.use(router);
-app.use(vuexStore, key);
+app.use(store, key);
 
-app.config.globalProperties.$storage = store;
+// app.config.globalProperties.$storage = store;
 app.mount('#app');

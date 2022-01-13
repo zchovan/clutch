@@ -1,9 +1,9 @@
 module.exports = {
-    pluginOptions: {
-        electronBuilder: {
-            nodeIntegration: true
-        }
-    }
+    // pluginOptions: {
+    //     electronBuilder: {
+    //         nodeIntegration: true
+    //     }
+    // }
 }
 // module.exports = {
 //     pluginOptions: {
