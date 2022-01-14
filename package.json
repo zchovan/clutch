@@ -22,6 +22,7 @@
     "core-js": "^3.6.5",
     "electron": "^16.0.5",
     "postcss": "^8.4.5",
+    "tw-elements": "^1.0.0-alpha8",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "4",

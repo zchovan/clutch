@@ -25,6 +25,10 @@ export const store = createStore({
         },
         addConnection(state:State, connection:Connection) {
             state.connections.push(connection);
+        },
+        deleteConnection(state:State, connection:Connection) {
+            const index = state.connections.indexOf(connection);
+            state.connections.splice(index, 1);
         }
     },
     actions: {
@@ -86,7 +90,7 @@ export const store = createStore({
             context.commit('setConnectionStatus', Status.NOT_CONNECTED);
         },
         deleteConnection(context, payload) {
-            context.state.connections = context.state.connections.filter(c => c.name !== payload.name);
+            context.commit('deleteConnection', payload);
         },
         resetCurrentConnection(context) {
             context.state.currentConnection = new Connection('', '', -1, '', false, '', '');

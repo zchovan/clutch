@@ -52,6 +52,7 @@ export default {
   },
   methods: {
     deleteConnectionByName(name) {
+      console.log("deleting: " + name)
       this.$store.dispatch('deleteConnection', { name })
     },
     connect(name) {

@@ -20,7 +20,9 @@ module.exports = {
       'primary-light-hover': '#33363C',
       'secondary': '#3BA55D',
       'gray': '#8e9297',
-      'gray-light': '#b9bbbe'
+      'gray-light': '#b9bbbe',
+      'dark-gray': '#202225',
+      'white': '#FFF'
     },
     fontFamily: {
       'roboto': ['roboto']
@@ -28,6 +30,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('@tailwindcss/forms'),
+    // require('@tailwindcss/forms'),
+    require('tw-elements/dist/plugin')
   ],
 }

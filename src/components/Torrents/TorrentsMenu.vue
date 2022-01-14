@@ -23,11 +23,6 @@ export default {
   mounted() {
     this.getTorrents()
   },
-  // watch: {
-  //   torrents() {
-  //     this.getTorrents();
-  //   }
-  // },
   methods: {
     getTorrents() {
       let conn = this.$store.getters.getCurrentConnection;
