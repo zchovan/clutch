@@ -305,13 +305,13 @@ export class Torrent {
      * @type {number}
      * @memberof Torrent
      */
-    private _rateDownloadBs: number|undefined;
+    private _rateDownload: number|undefined;
     /**
      * 
      * @type {number}
      * @memberof Torrent
      */
-    private _rateUploadBs: number|undefined;
+    private _rateUpload: number|undefined;
     /**
      * 
      * @type {number}
@@ -831,20 +831,20 @@ export class Torrent {
         this._queuePosition = value;
     }
 
-    get rateDownloadBs(): number | undefined {
-        return this._rateDownloadBs;
+    get rateDownload(): number | undefined {
+        return this._rateDownload;
     }
 
-    set rateDownloadBs(value: number | undefined) {
-        this._rateDownloadBs = value;
+    set rateDownload(value: number | undefined) {
+        this._rateDownload = value;
     }
 
-    get rateUploadBs(): number | undefined {
-        return this._rateUploadBs;
+    get rateUpload(): number | undefined {
+        return this._rateUpload;
     }
 
-    set rateUploadBs(value: number | undefined) {
-        this._rateUploadBs = value;
+    set rateUpload(value: number | undefined) {
+        this._rateUpload = value;
     }
 
     get recheckProgress(): number | undefined {
@@ -1014,6 +1014,10 @@ export class Torrent {
     set webseedsSendingToUs(value: number | undefined) {
         this._webseedsSendingToUs = value;
     }
+
+    constructor(obj:{}) {
+        obj && Object.assign(this, obj);
+    }
 }
 
 /**
@@ -1021,12 +1025,12 @@ export class Torrent {
     * @enum {string}
     */
 export enum TorrentStatusEnum {
-    Stopped = 'Stopped',
-    QueuedToCheckFiles = 'Queued to check files',
-    CheckingFiles = 'Checking files',
-    QueuedToDonwload = 'Queued to donwload',
-    Downloading = 'Downloading',
-    QueuedToSeed = 'Queued to seed',
-    Seeding = 'Seeding'
+    Stopped = 0,
+    QueuedToCheckFiles = 1,
+    CheckingFiles = 2,
+    QueuedToDonwload = 3,
+    Downloading = 4,
+    QueuedToSeed = 5,
+    Seeding = 6
 }
 

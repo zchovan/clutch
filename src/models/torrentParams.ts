@@ -161,7 +161,6 @@ export class TorrentParameters {
      */
     private _uploadLimited?:boolean;
 
-
     get bandwidthPriority(): number {
         return <number>this._bandwidthPriority;
     }

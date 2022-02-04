@@ -1,8 +1,6 @@
 <template>
   <div class="relative h-screen flex">
     <sidebar />
-    <!-- route outlet -->
-    <!-- component matched by the route will render here -->
     <router-view />
   </div>  
 </template>
@@ -22,7 +20,9 @@ export default {
     Sidebar    
   },
   mounted() {
+    console.log('RESET');
     this.$store.dispatch('resetCurrentConnection');
+    this.$store.dispatch('resetClient');
   },
   methods: {
 

@@ -1,8 +1,8 @@
 <template>
   <div class="flex-1">    
     <div class="flex">
-      <torrents-menu />          
-      <torrent-detail />        
+      <torrents-list />
+      <torrent-detail />
     </div>
     
     <!-- <torrents-menu/> -->  
@@ -10,17 +10,21 @@
 </template>
 
 <script>
-import TorrentsMenu from './TorrentsMenu.vue'
+import TorrentsList from './TorrentsList.vue'
 import TorrentDetail from './TorrentDetail.vue'
 
 export default {
   name: 'Torrents',
   components: {    
-    TorrentsMenu,
+    TorrentsList,
     TorrentDetail
   },
-  props: {
-    
+  data() {
+    return {
+
+    }
+  },
+  methods: {
   }
 }
 </script>

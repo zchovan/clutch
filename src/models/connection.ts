@@ -1,8 +1,10 @@
 /**
- * 
+ *
  * @export
  * @interface Connection
  */
+import {SessionConfig} from "@/models/session-config";
+
 export default class Connection {
     name: string;
     /**
@@ -47,6 +49,8 @@ export default class Connection {
      * @memberof Connection
      */
     csrf_token: string|undefined;
+
+    sessionConf: any|SessionConfig|undefined;
 
     constructor(
         name: string,

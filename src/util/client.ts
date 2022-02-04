@@ -4,6 +4,7 @@ import {QUEUE, TORRENT_FIELDS} from "@/util/util";
 import {TorrentParameters} from "@/models/torrentParams";
 import {NewTorrentDescriptor} from "@/models/new-torrent-descriptor";
 import {SessionConfig} from "@/models/session-config";
+import {Torrent} from "@/models";
 
 export default class Client {
     connection:Connection;
@@ -12,34 +13,89 @@ export default class Client {
     constructor(
         connection:Connection
     ) {
+
         this.connection = connection;
-        this.initClient(connection);
+        this._initClient();
     }
 
-    initClient(connection:Connection) {
-        if (connection.auth_required) {
-            this.client = axios.create({
-                baseURL: 'http://' + connection.url + ':' + connection.port,
+    _initClient() {
+        console.log('getting csrf');
+        this._initCSRF()
+            .then((initSuccess) => {
+                if (this.connection.auth_required) {
+                    this.client = axios.create({
+                        baseURL: 'http://' + this.connection.url + ':' + this.connection.port,
+                        method: 'POST',
+                        headers: {
+                            // @ts-ignore
+                            'x-transmission-session-id': this.connection.csrf_token
+                        },
+                        auth: {
+                            username: this.connection.username,
+                            password: this.connection.password
+                        },
+                    });
+                } else {
+                    this.client = axios.create({
+                        baseURL: this.connection.url,
+                        method: 'POST',
+                        headers: {
+                            // @ts-ignore
+                            'x-transmission-session-id': connection.csrf_token
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                this._initSessionConfig();
+            });
+    }
+
+    _initCSRF() {
+        return new Promise((resolve, reject) => {
+            let csrf = '';
+            axios.post('/transmission/rpc', {}, {
+                baseURL: 'http://' + this.connection.url + ':' + this.connection.port,
                 method: 'POST',
                 headers: {
                     // @ts-ignore
-                    'x-transmission-session-id': connection.csrf_token
+                    'x-transmission-session-id': this.connection.csrf_token
                 },
                 auth: {
-                    username: connection.username,
-                    password: connection.password
+                    username: this.connection.username,
+                    password: this.connection.password
                 },
-            });
-        } else {
-            this.client = axios.create({
-                baseURL: connection.url,
-                method: 'POST',
-                headers: {
-                    // @ts-ignore
-                    'x-transmission-session-id': connection.csrf_token
-                }
-            });
-        }
+            })
+                .then(result => {
+                    console.log(result);
+                }).catch((error) => {
+                    if (error.response.status == 409) {
+                        csrf = error.response.headers['x-transmission-session-id'];
+                        console.log('initcsrf token: ', csrf);
+                    } else {
+                        console.log(error);
+                        reject(error)
+                    }
+                }).finally(() => {
+                    this.connection.csrf_token = csrf;
+                    resolve(true);
+                });
+        });
+    }
+
+    _initSessionConfig() {
+        console.log('initsessionconf:csrf_token: \n', this.connection.csrf_token);
+        this.sessionGet()
+            .then((result:any) => {
+                console.log('sessionconf: \n', result.data.arguments);
+                this.connection.sessionConf = <SessionConfig>result.data.arguments;
+            })
+            .catch(error => {
+                console.log('init session error: \n', error);
+            })
     }
 
     getInstance() {
@@ -47,7 +103,7 @@ export default class Client {
     }
 
     /**
-     * Method name          | libtransmission function
+     *    Method name          | libtransmission function
      *    ---------------------+-------------------------------------------------
      *    "torrent-start"      | tr_torrentStart
      *    "torrent-start-now"  | tr_torrentStartNow
@@ -76,7 +132,7 @@ export default class Client {
                         'ids': ids
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -99,7 +155,7 @@ export default class Client {
                         'ids': ids
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -122,7 +178,7 @@ export default class Client {
                         'ids': ids
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -145,7 +201,7 @@ export default class Client {
                         'ids': ids
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -168,7 +224,7 @@ export default class Client {
                         'ids': ids
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -225,7 +281,7 @@ export default class Client {
                     'method': 'torrent-set',
                     'arguments': JSON.stringify(parameters),
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -265,7 +321,7 @@ export default class Client {
      *
      *    List of all fields can be found at src/util/util::TORRENT_FILES
      */
-    async getAllTorrents() {
+    async getAllTorrents() : Promise<Array<Torrent>>{
         return new Promise((resolve, reject) => {
             if (this.client !== undefined) {
                 this.client.post(this.connection.rpc_path, {
@@ -274,7 +330,11 @@ export default class Client {
                         'fields': TORRENT_FIELDS,
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    const torrentArray = Array<Torrent>();
+                    response.data.arguments.torrents.forEach((t:any) => {
+                        torrentArray.push(new Torrent(t));
+                    })
+                    resolve(torrentArray);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -325,7 +385,7 @@ export default class Client {
                     'method': 'torrent-add',
                     'arguments': JSON.stringify(torrentDesc),
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -355,7 +415,7 @@ export default class Client {
                         'delete-local-data': deleteLocalData
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -390,7 +450,7 @@ export default class Client {
                         'move': move
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -428,7 +488,7 @@ export default class Client {
                         'name': name
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -453,7 +513,7 @@ export default class Client {
                     'method': 'session-set',
                     'arguments': JSON.stringify(sessionConfig),
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -469,7 +529,19 @@ export default class Client {
      *        argument if present, or all supported fields (see 4.1) otherwise.
      */
     async sessionGet() {
-
+        return new Promise((resolve, reject) => {
+            if (this.client !== undefined) {
+                this.client.post(this.connection.rpc_path, {
+                    'method': 'session-get',
+                }).then((response) => {
+                    resolve(response);
+                }).catch((error) => {
+                    reject(error);
+                })
+            } else {
+                reject('Client is undefined');
+            }
+        });
     }
 
     /**
@@ -508,7 +580,7 @@ export default class Client {
                     'method': 'session-stats',
                     'arguments': {},
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -529,7 +601,7 @@ export default class Client {
                     'method': 'blocklist-update',
                     'arguments': {},
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -553,7 +625,7 @@ export default class Client {
                     'method': 'port-test',
                     'arguments': {},
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -576,7 +648,7 @@ export default class Client {
                     'method': 'session-close',
                     'arguments': {},
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -604,7 +676,7 @@ export default class Client {
                         'ids': ids
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })
@@ -641,7 +713,7 @@ export default class Client {
                         'path': path
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    resolve(response);
                 }).catch((error) => {
                     reject(error);
                 })

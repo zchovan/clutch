@@ -3,7 +3,8 @@ import { createStore, Store, useStore as baseUseStore } from 'vuex'
 import { State, Status } from '@/vuex/state';
 import Connection from '@/models/connection';
 import createPersistedState from 'vuex-persistedstate';
-import axios from 'axios';
+import {Torrent} from "@/models";
+import Client from '@/util/client';
 
 // define injection key
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -13,7 +14,9 @@ export const store = createStore({
         return {
             status: Status.NOT_CONNECTED,
             connections: <Array<Connection>>[],
-            currentConnection: <Connection>{}
+            currentConnection: <Connection>{},
+            selectedTorrent: <Torrent>{},
+            client: <Client>{},
         }
     },
     mutations: {
@@ -29,6 +32,15 @@ export const store = createStore({
         deleteConnection(state:State, connection:Connection) {
             const index = state.connections.indexOf(connection);
             state.connections.splice(index, 1);
+        },
+        selectTorrent(state:State, torrent:Torrent) {
+            state.selectedTorrent = torrent;
+        },
+        setClient(state:State, client:Client) {
+            state.client = client;
+        },
+        resetClient(state:State) {
+            delete state.client;
         }
     },
     actions: {
@@ -46,43 +58,10 @@ export const store = createStore({
                     c.password
                 );
 
-                let axios_instance;
-                if (conn.auth_required) {
-                    axios_instance = axios.create({
-                        baseURL: 'http://' + conn.url + ':' + conn.port,
-                        method: 'POST',
-                        headers: {},
-                        auth: {
-                            username: conn.username,
-                            password: conn.password
-                        },
-                    });
-                } else {
-                    axios_instance = axios.create({
-                        baseURL: conn.url,
-                        method: 'POST',
-                        headers: {}
-                    });
-                }
-
-                axios_instance.post(conn.rpc_path, {
-                    'method': 'torrent-get',
-                    'arguments': {
-                        'fields': [ 'id', 'name' ],
-                        'ids': [1]
-                    },
-                }).then(() => {
-                    console.log('this should not succeed');
-                }).catch((error) => {
-                    if (error.response.status == 409) {
-                        console.log(error.response.headers['x-transmission-session-id']);
-                        conn.csrf_token = error.response.headers['x-transmission-session-id'];
-                    } else {
-                        console.log(error);
-                    }
-                });
+                const transmissionClient = new Client(conn);
 
                 context.commit('setCurrentConnection', conn);
+                context.commit('setClient', transmissionClient);
             }
             context.commit('setConnectionStatus', Status.CONNECTED);
         },
@@ -95,6 +74,15 @@ export const store = createStore({
         resetCurrentConnection(context) {
             context.state.currentConnection = new Connection('', '', -1, '', false, '', '');
             context.commit('setConnectionStatus', Status.NOT_CONNECTED);
+        },
+        selectTorrent(context, torrent) {
+            context.commit('selectTorrent', torrent);
+        },
+        setClient(context, client) {
+            context.commit('setClient', client)
+        },
+        resetClient(context) {
+            context.commit('resetClient');
         }
     },
     getters: {
@@ -103,7 +91,16 @@ export const store = createStore({
         },
         getAllConnections(state) {
             return state.connections;
+        },
+        getSelectedTorrent(state) {
+            return state.selectedTorrent;
+        },
+        getClient(state) : Client|undefined {
+            if (state.client !== undefined) {
+                return state.client;
+            }
         }
+
     },
     plugins: [createPersistedState()]
 });

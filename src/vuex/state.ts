@@ -1,4 +1,6 @@
 import Connection from "../models/connection";
+import {Torrent} from "@/models";
+import Client from "@/util/client";
 
 /**
  *
@@ -8,7 +10,9 @@ import Connection from "../models/connection";
  export interface State {
     connections: Array<Connection>,
     status: Status,
-    currentConnection: Connection
+    currentConnection: Connection,
+    selectedTorrent: Torrent,
+    client: Client|undefined,
 }
 
 export enum Status {
