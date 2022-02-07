@@ -3,7 +3,7 @@
  * @export
  * @interface Connection
  */
-import {SessionConfig} from "@/models/session-config";
+import {SessionConfig} from "./session-config";
 
 export default class Connection {
     name: string;

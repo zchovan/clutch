@@ -5,11 +5,11 @@
       <torrent-detail />
     </div>
     
-    <!-- <torrents-menu/> -->  
+    <torrents-menu/>  
   </div>    
 </template>
 
-<script>
+<script lang="ts">
 import TorrentsList from './TorrentsList.vue'
 import TorrentDetail from './TorrentDetail.vue'
 

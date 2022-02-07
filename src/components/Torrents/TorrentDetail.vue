@@ -21,11 +21,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import BitField from 'bitfield';
 import { Base64 } from 'js-base64';
 
-export default {
+export default defineComponent({
   name: 'TorrentDetail',
   components: {        
   },
@@ -43,7 +44,7 @@ export default {
     }
   },
   methods: {
-    getPieces(pieces) {
+    getPieces(pieces:string) {
       let p = "";
       if (pieces !== undefined) {
         const bits = Base64.toUint8Array(pieces);
@@ -56,10 +57,9 @@ export default {
       return p;
     }
   }
-}
+})
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 </style>

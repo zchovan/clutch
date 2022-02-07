@@ -58,7 +58,7 @@
   </div>    
 </template>
 
-<script>
+<script lang="ts">
 import { ServerIcon, AdjustmentsIcon, ChevronUpIcon, ChevronDownIcon, DownloadIcon } from '@heroicons/vue/solid'
 export default {
   name: 'Sidebar',

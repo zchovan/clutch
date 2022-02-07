@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import Connection from "@/models/connection";
-import {QUEUE, TORRENT_FIELDS} from "@/util/util";
+import {QUEUE, TORRENT_FIELDS} from "./util";
 import {TorrentParameters} from "@/models/torrentParams";
 import {NewTorrentDescriptor} from "@/models/new-torrent-descriptor";
 import {SessionConfig} from "@/models/session-config";

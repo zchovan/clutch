@@ -1,9 +1,9 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store, useStore as baseUseStore } from 'vuex'
-import { State, Status } from '@/vuex/state';
+import { State, Status } from './state';
 import Connection from '@/models/connection';
 import createPersistedState from 'vuex-persistedstate';
-import {Torrent} from "@/models";
+import {Torrent} from "@/models/torrent";
 import Client from '@/util/client';
 
 // define injection key

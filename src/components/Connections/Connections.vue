@@ -11,7 +11,7 @@
         :name="connection.name" 
         :key="connection.name"
         :auth-req="connection.auth_required"
-        :host="connection.host"
+        :host="connection.url"
         :port="connection.port"
         @click="selectConnectionByName(connection.name)"
         @connection-delete="getConnections"
@@ -134,18 +134,19 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import ConnectionListItem from './ConnectionListItem.vue'
-import Connection from '../../models/connection';
+import Connection from '@/models/connection';
 
-export default {
+export default defineComponent({
   name: 'Connections',
   components: {
     ConnectionListItem
   },
   data() {
     return {
-      connections: {},
+      connections: [] as Connection[],
       selected_connection: {},
       name: "",
       host: "",
@@ -165,9 +166,9 @@ export default {
     this.getConnections();
   },
   methods: {
-    selectConnectionByName(name) {
+    selectConnectionByName(name:String) {
       const connections = this.$store.getters.getAllConnections;
-      this.selected_connection = connections.find(conn => conn.name === name)
+      this.selected_connection = connections.find((conn: Connection) => conn.name === name)
       console.log(this.selected_connection);
     },
     saveConnection() {
@@ -188,5 +189,5 @@ export default {
       this.connections = this.$store.getters.getAllConnections;
     }
   }
-}
+})
 </script>

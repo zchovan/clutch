@@ -1,4 +1,4 @@
-import Connection from "../models/connection";
+import Connection from "@/models/connection";
 import {Torrent} from "@/models";
 import Client from "@/util/client";
 
