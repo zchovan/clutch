@@ -1,10 +1,9 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store, useStore as baseUseStore } from 'vuex'
 import { State, Status } from './state';
-import Connection from '@/models/connection';
+import Connection from '../models/connection';
 import createPersistedState from 'vuex-persistedstate';
-import {Torrent} from "@/models/torrent";
-import Client from '@/util/client';
+import Client from "@/util/client";
 
 // define injection key
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -14,9 +13,7 @@ export const store = createStore({
         return {
             status: Status.NOT_CONNECTED,
             connections: <Array<Connection>>[],
-            currentConnection: <Connection>{},
-            selectedTorrent: <Torrent>{},
-            client: <Client>{},
+            currentConnection: <Connection>{}
         }
     },
     mutations: {
@@ -33,15 +30,6 @@ export const store = createStore({
             const index = state.connections.indexOf(connection);
             state.connections.splice(index, 1);
         },
-        selectTorrent(state:State, torrent:Torrent) {
-            state.selectedTorrent = torrent;
-        },
-        setClient(state:State, client:Client) {
-            state.client = client;
-        },
-        resetClient(state:State) {
-            delete state.client;
-        }
     },
     actions: {
         connect(context, payload) {
@@ -58,10 +46,7 @@ export const store = createStore({
                     c.password
                 );
 
-                const transmissionClient = new Client(conn);
-
                 context.commit('setCurrentConnection', conn);
-                context.commit('setClient', transmissionClient);
             }
             context.commit('setConnectionStatus', Status.CONNECTED);
         },
@@ -74,33 +59,15 @@ export const store = createStore({
         resetCurrentConnection(context) {
             context.state.currentConnection = new Connection('', '', -1, '', false, '', '');
             context.commit('setConnectionStatus', Status.NOT_CONNECTED);
-        },
-        selectTorrent(context, torrent) {
-            context.commit('selectTorrent', torrent);
-        },
-        setClient(context, client) {
-            context.commit('setClient', client)
-        },
-        resetClient(context) {
-            context.commit('resetClient');
         }
     },
     getters: {
-        getCurrentConnection(state) {
+        getCurrentConnection(state: State) {
             return state.currentConnection;
         },
-        getAllConnections(state) {
+        getAllConnections(state: State) {
             return state.connections;
-        },
-        getSelectedTorrent(state) {
-            return state.selectedTorrent;
-        },
-        getClient(state) : Client|undefined {
-            if (state.client !== undefined) {
-                return state.client;
-            }
         }
-
     },
     plugins: [createPersistedState()]
 });

@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts">
+import {defineComponent} from "vue";
 import { XCircleIcon, LoginIcon, ShieldCheckIcon } from '@heroicons/vue/solid'
-import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ConnectionListItem',
@@ -52,11 +52,11 @@ export default defineComponent({
     }
   },
   methods: {
-    deleteConnectionByName(name:string) {
+    deleteConnectionByName(name: String) {
       console.log("deleting: " + name)
       this.$store.dispatch('deleteConnection', { name })
     },
-    connect(name:String) {
+    connect(name: String) {
       this.$store.dispatch('connect', { name });
     }
   }

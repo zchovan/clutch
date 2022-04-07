@@ -1,37 +1,23 @@
-<script lang="ts">
-import Sidebar from '@/Sidebar.vue'
-import { defineComponent } from 'vue';
-import { ipcRenderer } from 'electron';
-
-
-export default defineComponent({
-  name: 'app',
-  components: {
-    Sidebar,
-  },
-  setup() {
-    ipcRenderer.send('message', 'Hello from App.vue!');
-  },
-  data() {
-    return {
-      torrents: "",
-      headers: {}
-    }
-  },
-  mounted() {
-    console.log('RESET');
-    this.$store.dispatch('resetCurrentConnection');
-    this.$store.dispatch('resetClient');
-  },
-})
-</script>
-
 <template>
   <div class="relative h-screen flex">
-    <sidebar />
+    <Sidebar />
     <router-view />
-  </div>  
+  </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import HelloWorld from './components/HelloWorld.vue'
+import Sidebar from './components/Sidebar.vue'
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    HelloWorld,
+    Sidebar
+  }
+})
+</script>
 
 <style>
 #app {

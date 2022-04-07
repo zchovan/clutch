@@ -1,70 +1,48 @@
-# Electron Vue Template
+# Vue 3 + Vite + Electron + TypeScript
 
-A starter template that's bundled together with **VueJS 3.x**, **Electron 16.x**, **ViteJS** and **Electron Builder** 👌
+This template should help get you started developing with Vue 3 and Typescript in Vite.
 
-## About
+## Recommended IDE Setup
 
-This project got inspired by [electron-vue](https://github.com/SimulatedGREG/electron-vue)
+[VSCode](https://code.visualstudio.com/) + [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur). Make sure to enable `vetur.experimental.templateInterpolationService` in settings!
 
-This template uses [ViteJS](https://vitejs.dev) for the development server providing HMR (Hot Reload) while developing your Electron app.\
-Building the Electron application is done by [Electron Builder](https://www.electron.build/), making your application cross-platform and easily distributable, it also supports cross-platform compilation!
+### If Using `<script setup>`
 
-This template doesn't come with any unnecessary dependencies and is unopinionated, so you can start developing your Electron / Vue applications however you want.
+[`<script setup>`](https://github.com/vuejs/rfcs/pull/227) is a feature that is currently in RFC stage. To get proper IDE support for the syntax, use [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) instead of Vetur (and disable Vetur).
 
-## Getting started
+## Type Support For `.vue` Imports in TS
 
-Execute the following commands to start developing straight away:
+Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can use the following:
 
+### If Using Volar
+
+Run `Volar: Switch TS Plugin on/off` from VSCode command palette.
+
+### If Using Vetur
+
+1. Install and add `@vuedx/typescript-plugin-vue` to the [plugins section](https://www.typescriptlang.org/tsconfig#plugins) in `tsconfig.json`
+2. Delete `src/shims-vue.d.ts` as it is no longer needed to provide module info to Typescript
+3. Open `src/main.ts` in VSCode
+4. Open the VSCode command palette
+5. Search and run "Select TypeScript version" -> "Use workspace version"
+
+# Scripts
+
+Run `yarn electron:dev` to work with electron in development mode.
 ```bash
-git clone https://github.com/Deluze/electron-vue-template
-cd electron-vue-template
-npm install
-npm run dev
+yarn electron:dev
 ```
 
-That's all!
-
-## Commands
-
+Run `yarn app:build` to build your electron app.
 ```bash
-npm run dev # starts application with hot reload
-npm run build # builds application
-
-# OR
-
-npm run build:win # uses windows as build target
-npm run build:mac # uses mac as build target
-npm run build:linux # uses linux as build target
+yarn app:build
 ```
 
-Optional configuration options can be found in the [Electron Builder CLI docs](https://www.electron.build/cli.html).
-
-## Project Structure
-
+Run `yarn dev` to open vite in browser in development mode.
 ```bash
-- root
-  - config/
-    - vite.js # ViteJS configuration
-    - electron-builder.json # Electron Builder configuration
-  - scripts/ # all the scripts used to build or serve your application, change as you like.
-  - src/
-    - main/ # Main thread (Electron application source)
-    - renderer/ # Renderer thread (VueJS application source)
+yarn dev
 ```
-
-## Using static files
-
-If you have any files that you want to copy over to the app directory after installation, you will need to add those files in your `src/main/static` directory.
-
-#### Referencing static files from your main process
-
-```js
-/* Assumes src/main/static/yourFile.txt exists */
-
-const { app } = require('electron');
-const FileSystem = require('fs');
-const Path = require('path');
-
-const path = Path.join(app.getAppPath(), 'static', 'yourFile.txt');
-const contents = FileSystem.readFileSync(path);
+Run `yarn build` to build files and can be served.
+```bash
+yarn build
 ```
