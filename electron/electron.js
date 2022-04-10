@@ -1,3 +1,5 @@
+// main process
+
 const path = require('path');
 const { default: installExtension, VUEJS3_DEVTOOLS } = require('electron-devtools-installer');
 const { app, BrowserWindow } = require('electron');
@@ -11,7 +13,8 @@ function createWindow() {
     height: 1080,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
+      nodeIntegration: true,
+      contextIsolation: true,
       webSecurity: false
     },
   });

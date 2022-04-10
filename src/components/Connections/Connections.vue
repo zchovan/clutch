@@ -117,7 +117,6 @@ export default defineComponent({
     selectConnectionByName(name) {
       const connections = this.$store.getters.getAllConnections;
       this.selected_connection = connections.find(conn => conn.name === name)
-      // console.log(this.selected_connection);
     },
   }
 })

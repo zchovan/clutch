@@ -14,16 +14,23 @@
         class="fill-secondary w-6 h-6"
         @click="connect(name)"
       />
+      <p>HOST {{ host }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
+import { useToast } from "vue-toastification";
 import { XCircleIcon, LoginIcon, ShieldCheckIcon } from '@heroicons/vue/solid'
 
 export default defineComponent({
   name: 'ConnectionListItem',
+  setup() {
+    const toast = useToast();
+
+    return { toast }
+  },
   components: {
     XCircleIcon,
     LoginIcon,
@@ -57,7 +64,13 @@ export default defineComponent({
       this.$store.dispatch('deleteConnection', { name })
     },
     connect(name: String) {
-      this.$store.dispatch('connect', { name });
+      console.log('connect was clicked');
+      this.$store.dispatch('connect', { name })
+        .then((result) => {
+          console.log(result);
+          console.log('from connections: ', this.$store.getters.getStatus);
+          this.toast.success("Connected to " + name);
+        });
     }
   }
 })

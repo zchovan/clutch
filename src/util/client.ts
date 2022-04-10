@@ -46,6 +46,7 @@ export default class Client {
     setupInterceptors() {
         if (this.client !== undefined) {
             const axiosApiInstance = this.client;
+            // axiosApiInstance.interceptors.request.use()
             axiosApiInstance.interceptors.response.use(
                 function (response) {
                     console.log('intercepted okay');
@@ -56,12 +57,14 @@ export default class Client {
                     console.log('intercepted rejection');
                     const originalRequest = error.config;
                     if (error.response.status == 409) {
-                        originalRequest.retry = true;
+                        originalRequest._retry = true;
                         console.log('interceptor csrf token: ', error.response.headers['x-transmission-session-id']);
                         // @ts-ignore
-                        axios.defaults.headers.common['x-transmission-session-id'] =
+                        originalRequest.headers['x-transmission-session-id'] =
                             error.response.headers['x-transmission-session-id'];
-                        // return axiosApiInstance(originalRequest);
+                        return axiosApiInstance(originalRequest);
+                    } else {
+                        return Promise.reject(error);
                     }
                 });
         }
@@ -317,6 +320,7 @@ export default class Client {
                         'fields': TORRENT_FIELDS,
                     },
                 }).then((response) => {
+                    console.log('all torrents: ', response);
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);

@@ -12,6 +12,7 @@
 import {defineComponent} from "vue";
 import TorrentMenuItem from "./TorrentMenuItem.vue";
 import Client from "@/util/client";
+import {Status} from "@/store/state";
 
 export default defineComponent({
   name: 'TorrentsMenu',
@@ -26,7 +27,10 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.getTorrents()
+    if (this.$store.getters.getStatus === Status.CONNECTED) {
+      console.log('getting torrents');
+      this.getTorrents();
+    }
   },
   methods: {
     getTorrents() {

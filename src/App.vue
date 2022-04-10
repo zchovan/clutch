@@ -10,11 +10,16 @@ import { defineComponent } from 'vue'
 import HelloWorld from './components/HelloWorld.vue'
 import Sidebar from './components/Sidebar.vue'
 
+
+
 export default defineComponent({
   name: 'App',
   components: {
     HelloWorld,
     Sidebar
+  },
+  mounted: function() {
+      this.$store.dispatch('disconnect');
   }
 })
 </script>

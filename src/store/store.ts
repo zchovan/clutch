@@ -32,26 +32,33 @@ export const store = createStore({
         },
     },
     actions: {
-        connect(context, payload) {
-            context.commit('setConnectionStatus', Status.CONNECTING);
-            const c = context.state.connections.find(conn => conn.name === payload.name);
-            if (c != undefined) {
-                const conn = new Connection(
-                    c.name,
-                    c.url,
-                    c.port,
-                    c.rpc_path,
-                    c.auth_required,
-                    c.username,
-                    c.password
-                );
+        connect({commit, state}, payload) {
+            return new Promise((resolve) => {
+                commit('setConnectionStatus', Status.CONNECTING);
+                const c = state.connections.find(conn => conn.name === payload.name);
+                if (c != undefined) {
+                    const conn = new Connection(
+                        c.name,
+                        c.url,
+                        c.port,
+                        c.rpc_path,
+                        c.auth_required,
+                        c.username,
+                        c.password
+                    );
 
-                context.commit('setCurrentConnection', conn);
-            }
-            context.commit('setConnectionStatus', Status.CONNECTED);
+                    commit('setCurrentConnection', conn);
+                }
+                commit('setConnectionStatus', Status.CONNECTED);
+                resolve('connected');
+            });
         },
-        disconnect(context) {
-            context.commit('setConnectionStatus', Status.NOT_CONNECTED);
+        disconnect({commit}) {
+            // return new Promise((resolve) => {
+                commit('setConnectionStatus', Status.NOT_CONNECTED);
+                commit('setCurrentConnection', null);
+                // resolve('disconnected');
+            // });
         },
         deleteConnection(context, payload) {
             context.commit('deleteConnection', payload);
@@ -67,6 +74,9 @@ export const store = createStore({
         },
         getAllConnections(state: State) {
             return state.connections;
+        },
+        getStatus(state: State) : Status {
+            return state.status;
         }
     },
     plugins: [createPersistedState()]
