@@ -60,15 +60,11 @@ export default defineComponent({
   },
   methods: {
     deleteConnectionByName(name: String) {
-      console.log("deleting: " + name)
       this.$store.dispatch('deleteConnection', { name })
     },
     connect(name: String) {
-      console.log('connect was clicked');
       this.$store.dispatch('connect', { name })
         .then((result) => {
-          console.log(result);
-          console.log('from connections: ', this.$store.getters.getStatus);
           this.toast.success("Connected to " + name);
         });
     }

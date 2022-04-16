@@ -4,6 +4,7 @@ import {QUEUE, TORRENT_FIELDS} from "@/util/util";
 import {TorrentParameters} from "@/models/torrentParams";
 import {NewTorrentDescriptor} from "@/models/new-torrent-descriptor";
 import {SessionConfig} from "@/models/session-config";
+import {Torrent} from "@/models";
 
 export default class Client {
     connection:Connection;
@@ -15,7 +16,6 @@ export default class Client {
         this.connection = connection;
         this.initClient();
         this.setupInterceptors();
-        // this.refreshToken();
     }
 
     initClient() {
@@ -71,26 +71,6 @@ export default class Client {
 
     }
 
-    getInstance() {
-        return this.client;
-    }
-
-    refreshToken() {
-        if (this.client !== undefined) {
-            this.client.post(this.connection.rpc_path, {
-                'arguments': {
-                    'fields': [
-                        'version'
-                    ]
-                },
-                'method': 'session-get'
-            }).then((response) => {
-               // nothing to do
-            }).catch((error) => {
-                this.connection.csrf_token = error.headers['x-transmission-session-id'];
-            });
-        }
-    }
 
     /**
      * Method name          | libtransmission function
@@ -312,7 +292,7 @@ export default class Client {
      *    List of all fields can be found at src/util/util::TORRENT_FILES
      */
     async getAllTorrents() {
-        return new Promise((resolve, reject) => {
+        return new Promise<Torrent[]>((resolve, reject) => {
             if (this.client !== undefined) {
                 this.client.post(this.connection.rpc_path, {
                     'method': 'torrent-get',
@@ -320,7 +300,6 @@ export default class Client {
                         'fields': TORRENT_FIELDS,
                     },
                 }).then((response) => {
-                    console.log('all torrents: ', response);
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);

@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1">
     <div class="flex">
-      <torrents-menu />
+      <torrents-list />
       <torrent-detail />
     </div>
   </div>
@@ -9,13 +9,13 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import TorrentsMenu from "./TorrentsMenu.vue";
+import TorrentsList from "./TorrentsList.vue";
 import TorrentDetail from "./TorrentDetail.vue";
 
 export default defineComponent({
   name: 'Torrents',
   components: {
-    TorrentsMenu,
+    TorrentsList,
     TorrentDetail
   }
 })

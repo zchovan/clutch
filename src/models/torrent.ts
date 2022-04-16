@@ -6,437 +6,437 @@ import { FileStats, Label, Peer, PeersFrom, Tracker, TrackerStats } from ".";
  * @class Torrent
  */
 export class Torrent {
-     /**
-     * 
+    /**
+     *
      * @type {number}
      * @memberof Torrent
      */
-     private _activityDate: number|undefined;
-     /**
-     * 
+    private _activityDate: number | undefined;
+    /**
+     *
      * @type {number}
      * @memberof Torrent
      */
-     private _addedDate: number|undefined;
-     /**
-     * 
+    private _addedDate: number | undefined;
+    /**
+     *
      * @type {number}
      * @memberof Torrent
      */
-     private _bandwidthPriority: number|undefined;
-     /**
-     * 
+    private _bandwidthPriority: number | undefined;
+    /**
+     *
      * @type {string}
      * @memberof Torrent
      */
-     private _comment: string|undefined;
-     /**
-     * 
+    private _comment: string | undefined;
+    /**
+     *
      * @type {number}
      * @memberof Torrent
      */
-     private _corruptEver: number|undefined;
-     /**
-     * 
+    private _corruptEver: number | undefined;
+    /**
+     *
      * @type {string}
      * @memberof Torrent
      */
-     private _creator: string|undefined;
-     /**
-     * 
-     * @type {number}
-     * @memberof Torrent
-     */
-     private _dateCreated: number|undefined;
+    private _creator: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _desiredAvailable: number|undefined;
-     /**
-     * 
-     * @type {number}
-     * @memberof Torrent
-     */
-     private _doneDate: number|undefined;
+    private _dateCreated: number | undefined;
     /**
-     * 
+     *
+     * @type {number}
+     * @memberof Torrent
+     */
+    private _desiredAvailable: number | undefined;
+    /**
+     *
+     * @type {number}
+     * @memberof Torrent
+     */
+    private _doneDate: number | undefined;
+    /**
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _downloadDir: string|undefined;
+    private _downloadDir: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _downloadedEver: number|undefined;
+    private _downloadedEver: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _downloadLimit: number|undefined;
+    private _downloadLimit: number | undefined;
     /**
-     * 
+     *
      * @type {boolean}
      * @memberof Torrent
      */
-    private _downloadLimited: boolean|undefined;
+    private _downloadLimited: boolean | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _editDate: number|undefined;
+    private _editDate: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _error: number|undefined;
+    private _error: number | undefined;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _errorString: string|undefined;
+    private _errorString: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _eta: number|undefined;
+    private _eta: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _etaIdle: number|undefined;
+    private _etaIdle: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _fileCount: number|undefined;
+    private _fileCount: number | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;any&gt;}
      * @memberof Torrent
      */
-    private _files: Array<File>|undefined;
+    private _files: Array<File> | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;FileStats&gt;}
      * @memberof Torrent
      */
-    private _fileStats: Array<FileStats>|undefined;
+    private _fileStats: Array<FileStats> | undefined;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _hashString: string|undefined;
+    private _hashString: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _haveUnchecked: number|undefined;
+    private _haveUnchecked: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _haveValid: number|undefined;
+    private _haveValid: number | undefined;
     /**
-     * 
+     *
      * @type {boolean}
      * @memberof Torrent
      */
-    private _honorsSessionLimits: boolean|undefined;
+    private _honorsSessionLimits: boolean | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _id: number|undefined;
+    private _id: number | undefined;
     /**
-     * 
+     *
      * @type {boolean}
      * @memberof Torrent
      */
-    private _isFinished: boolean|undefined;
+    private _isFinished: boolean | undefined;
     /**
-     * 
+     *
      * @type {boolean}
      * @memberof Torrent
      */
-    private _isPrivate: boolean|undefined;
+    private _isPrivate: boolean | undefined;
     /**
-     * 
+     *
      * @type {boolean}
      * @memberof Torrent
      */
-    private _isStalled: boolean|undefined;
+    private _isStalled: boolean | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;Label&gt;}
      * @memberof Torrent
      */
-    private _labels: Array<Label>|undefined;
+    private _labels: Array<Label> | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _leftUntilDone: number|undefined;
+    private _leftUntilDone: number | undefined;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _magnetLink: string|undefined;
+    private _magnetLink: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _manualAnnounceTime: number|undefined;
+    private _manualAnnounceTime: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _maxConnectedPeers: number|undefined;
+    private _maxConnectedPeers: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _metadataPercentComplete: number|undefined;
+    private _metadataPercentComplete: number | undefined;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _name: string|undefined;
+    private _name: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _peerLimit: number|undefined;
+    private _peerLimit: number | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;Peer&gt;}
      * @memberof Torrent
      */
-    private _peers: Array<Peer>|undefined;
+    private _peers: Array<Peer> | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _peersConnected: number|undefined;
+    private _peersConnected: number | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;PeersFrom&gt;}
      * @memberof Torrent
      */
-    private _peersFrom: Array<PeersFrom>|undefined;
+    private _peersFrom: Array<PeersFrom> | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _peersGettingFromUs: number|undefined;
+    private _peersGettingFromUs: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _peersSendingToUs: number|undefined;
+    private _peersSendingToUs: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _percentDone: number|undefined;
+    private _percentDone: number | undefined;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _pieces: string|undefined;
+    private _pieces: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _pieceCount: number|undefined;
+    private _pieceCount: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _pieceSize: number|undefined;
+    private _pieceSize: number | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;number&gt;}
      * @memberof Torrent
      */
-    private _priorities: Array<number>|undefined;
+    private _priorities: Array<number> | undefined;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _primaryMimeType: string|undefined;
+    private _primaryMimeType: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _queuePosition: number|undefined;
+    private _queuePosition: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _rateDownloadBs: number|undefined;
+    private _rateDownloadBs: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _rateUploadBs: number|undefined;
+    private _rateUploadBs: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _recheckProgress: number|undefined;
+    private _recheckProgress: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _secondsDownloading: number|undefined;
+    private _secondsDownloading: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _secondsSeeding: number|undefined;
+    private _secondsSeeding: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _seedIdleLimit: number|undefined;
+    private _seedIdleLimit: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _seedIdleMode: number|undefined;
+    private _seedIdleMode: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _seedRatioLimit: number|undefined;
+    private _seedRatioLimit: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _seedRatioMode: number|undefined;
+    private _seedRatioMode: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _sizeWhenDone: number|undefined;
+    private _sizeWhenDone: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _startDate: number|undefined;
+    private _startDate: number | undefined;
     /**
-     * 
+     *
      * @type {string}
      * @memberof Torrent
      */
-    private _status: TorrentStatusEnum|undefined;
+    private _status: TorrentStatusEnum | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;Tracker&gt;}
      * @memberof Torrent
      */
-    private _trackers: Array<Tracker>|undefined;
+    private _trackers: Array<Tracker> | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;TrackerStats&gt;}
      * @memberof Torrent
      */
-    private _trackerStats: Array<TrackerStats>|undefined;
+    private _trackerStats: Array<TrackerStats> | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _totalSize: number|undefined;
-    /** 
+    private _totalSize: number | undefined;
+    /**
      * @type {string}
      * @memberof Torrent
      */
-    private _torrentFile: string|undefined;
+    private _torrentFile: string | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _uploadedEver: number|undefined;
+    private _uploadedEver: number | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _uploadLimit: number|undefined;
+    private _uploadLimit: number | undefined;
     /**
-     * 
+     *
      * @type {boolean}
      * @memberof Torrent
      */
-    private _uploadLimited: boolean|undefined;
+    private _uploadLimited: boolean | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _uploadRatio: number|undefined;
+    private _uploadRatio: number | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;boolean&gt;}
      * @memberof Torrent
      */
-    private _wanted: Array<boolean>|undefined;
+    private _wanted: Array<boolean> | undefined;
     /**
-     * 
+     *
      * @type {Array&lt;string&gt;}
      * @memberof Torrent
      */
-    private _webseeds: Array<string>|undefined;
+    private _webseeds: Array<string> | undefined;
     /**
-     * 
+     *
      * @type {number}
      * @memberof Torrent
      */
-    private _webseedsSendingToUs: number|undefined;
+    private _webseedsSendingToUs: number | undefined;
 
 
     get activityDate(): number | undefined {
@@ -1014,7 +1014,32 @@ export class Torrent {
     set webseedsSendingToUs(value: number | undefined) {
         this._webseedsSendingToUs = value;
     }
+
+    humanReadableSize() : string {
+        let hrSize = "N/A";
+        if (this.sizeWhenDone !== undefined) {
+            const m = this.sizeWhenDone / 1024.0;
+            const g = this.sizeWhenDone / 1048576.0;
+            const t = this.sizeWhenDone / 1073741824.0;
+
+            if (t > 1) {
+                hrSize = t + "TB";
+            } else if (g > 1) {
+                hrSize = g + "GB";
+            } else if (m > 1) {
+                hrSize = m + "MB";
+            } else {
+                hrSize = this.sizeWhenDone + "KB";
+            }
+        }
+        return hrSize;
+    }
+
+    downloadPercentage() : number {
+        return 100;
+    }
 }
+
 
 /**
     * @export
