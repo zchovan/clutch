@@ -1014,30 +1014,6 @@ export class Torrent {
     set webseedsSendingToUs(value: number | undefined) {
         this._webseedsSendingToUs = value;
     }
-
-    humanReadableSize() : string {
-        let hrSize = "N/A";
-        if (this.sizeWhenDone !== undefined) {
-            const m = this.sizeWhenDone / 1024.0;
-            const g = this.sizeWhenDone / 1048576.0;
-            const t = this.sizeWhenDone / 1073741824.0;
-
-            if (t > 1) {
-                hrSize = t + "TB";
-            } else if (g > 1) {
-                hrSize = g + "GB";
-            } else if (m > 1) {
-                hrSize = m + "MB";
-            } else {
-                hrSize = this.sizeWhenDone + "KB";
-            }
-        }
-        return hrSize;
-    }
-
-    downloadPercentage() : number {
-        return 100;
-    }
 }
 
 
@@ -1046,12 +1022,12 @@ export class Torrent {
     * @enum {string}
     */
 export enum TorrentStatusEnum {
-    Stopped = 'Stopped',
-    QueuedToCheckFiles = 'Queued to check files',
-    CheckingFiles = 'Checking files',
-    QueuedToDonwload = 'Queued to donwload',
-    Downloading = 'Downloading',
-    QueuedToSeed = 'Queued to seed',
-    Seeding = 'Seeding'
+    Stopped,
+    QueuedToCheckFiles,
+    CheckingFiles,
+    QueuedToDonwload,
+    Downloading,
+    QueuedToSeed,
+    Seeding
 }
 

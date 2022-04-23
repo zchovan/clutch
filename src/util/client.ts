@@ -291,7 +291,7 @@ export default class Client {
      *
      *    List of all fields can be found at src/util/util::TORRENT_FILES
      */
-    async getAllTorrents() {
+    async getAllTorrents() : Promise<Torrent[]> {
         return new Promise<Torrent[]>((resolve, reject) => {
             if (this.client !== undefined) {
                 this.client.post(this.connection.rpc_path, {

@@ -6,11 +6,11 @@
       a 15.9155 15.9155 0 0 1 0 31.831
       a 15.9155 15.9155 0 0 1 0 -31.831"
     />
-    <text x="18" y="20.35" class="percentage">{{percentage}}%</text>
+    <text x="18" y="20.35" class="percentage">{{formattedPercentage(percentage)}}%</text>
   </svg>
 </template>
 
-<script>
+<script lang="ts">
 import {defineComponent} from "vue";
 
 export default defineComponent( {
@@ -40,6 +40,11 @@ export default defineComponent( {
   computed: {
     strokeDasharray() {
       return this.percentage + ", 100";
+    }
+  },
+  methods: {
+    formattedPercentage(percent: number) : number {
+      return Math.floor(percent);
     }
   }
 });

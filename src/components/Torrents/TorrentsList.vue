@@ -1,5 +1,14 @@
 <template>
   <div class="w-1/2 min-w-64 h-screen bg-primary-light text-gray torrent-menu overflow-y-scroll">
+    <div class="filtering">
+      <select name="status" id="filteredStatus" v-model="selectedStatus">
+        <option value=-1>All</option>
+        <option value=0>Stopped</option>
+        <option value=4>Downloading</option>
+        <option value=6>Seeding</option>
+      </select>
+      <span>count: {{ torrents.length }}</span>
+    </div>
     <torrent-list-item
       v-for="torrent in torrents"
       :torrent="torrent"
@@ -27,7 +36,8 @@ export default defineComponent({
   },
   data() {
     return {
-      torrents: [] as Torrent[]
+      torrents: [] as Torrent[],
+      selectedStatus: -1,
     }
   },
   mounted() {
@@ -40,16 +50,25 @@ export default defineComponent({
     torrents: function() {
       setTimeout(() => {
         this.getTorrents();
-      }, 5000);
+      }, 1000);
     }
+  },
+  computed: {
+
   },
   methods: {
     getTorrents() {
       let client = new Client(this.$store.getters.getCurrentConnection);
-
       client.getAllTorrents()
         .then((torrents) => {
-          this.torrents = torrents;
+          if (this.selectedStatus !== -1) {
+            this.torrents = torrents.filter((t) => {
+              console.log("selected: ", typeof this.selectedStatus, "t status: ", typeof t.status);
+              return t.status === parseInt(this.selectedStatus);
+            })
+          } else {
+            this.torrents = torrents;
+          }
         })
         .catch((error: any) => {
           console.log(error);
