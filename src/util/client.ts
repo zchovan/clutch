@@ -45,6 +45,7 @@ export default class Client {
     }
     setupInterceptors() {
         if (this.client !== undefined) {
+            let connection = this.connection;
             const axiosApiInstance = this.client;
             // axiosApiInstance.interceptors.request.use()
             axiosApiInstance.interceptors.response.use(
@@ -62,6 +63,7 @@ export default class Client {
                         // @ts-ignore
                         originalRequest.headers['x-transmission-session-id'] =
                             error.response.headers['x-transmission-session-id'];
+                        connection.csrf_token = error.response.headers['x-transmission-session-id'];
                         return axiosApiInstance(originalRequest);
                     } else {
                         return Promise.reject(error);
@@ -300,7 +302,12 @@ export default class Client {
                         'fields': TORRENT_FIELDS,
                     },
                 }).then((response) => {
-                    resolve(response.data.arguments.torrents);
+                    let objArray : Object[] = response.data.arguments.torrents;
+                    let typedArray : Torrent[] = [];
+                    for (let i = 0; i < objArray.length; i++) {
+                        typedArray.push(new Torrent(objArray[i]));
+                    }
+                    resolve(typedArray);
                 }).catch((error) => {
                     reject(error);
                 })

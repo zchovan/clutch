@@ -1,15 +1,35 @@
 <template>
   <div class="bg-primary-lighter rounded-xl m-2 mr-1 p-2">
-    <div class="grid grid-cols-5 gap-4">
-      <div class="col-span-4">
-        <p class>{{ torrent.name }}</p>
-        <p>{{ humanReadableSize(torrent.sizeWhenDone - torrent.leftUntilDone) }}
-          Gb of {{ humanReadableSize(torrent.sizeWhenDone) }}</p>
-        <p>{{ torrent.status }}</p>
-        <p>{{ humanReadableSize(torrent.rateDownloadBs) }}/s</p>
+    <div class="grid grid-cols-5 gap-1 p-1">
+      <div class="col-span-4 align-baseline">
+        <component
+            class="w-6 h-6 m-0 inline mb-1.5 mr-1 fill-secondary"
+            :is="formatStatus(torrent.status)" />
+        <span class="text-xl inline m-0">{{ torrent.name }}</span>
       </div>
-      <div class="col-span-1 justify-items-end">
-        <PercentageCircle :percentage="torrent.percentDone * 100" />
+      <div class="col-span-1 row-span-3 justify-items-end">
+        <PercentageCircle :percentage="torrent.percentDone * 100" class=""/>
+        <div class="speeds ">
+          <ChevronDownIcon class="fill-secondary w-5 h-5 float-left block" />
+          <span class="float-left block">{{ humanReadableSize(torrent.rateDownload) }}/s</span>
+          <ChevronUpIcon class="fill-secondary w-5 h-5 float-left block" />
+          <span class="float-left block">{{ humanReadableSize(torrent.rateUpload) }}/s</span>
+        </div>
+      </div>
+      <div class="col-span-4 row-span-1">
+        <DownloadIcon class="fill-secondary w-5 h-5 float-left block" />
+        <span class="pl-1"> {{ humanReadableSize(torrent.sizeWhenDone - torrent.leftUntilDone) }}
+          ({{ humanReadableSize(torrent.sizeWhenDone) }})
+        </span>
+      </div>
+      <div class="col-span-4 row-span-1">
+        <UploadIcon class="fill-secondary w-5 h-5 float-left block" />
+        <span class="pl-1"> {{ humanReadableSize(torrent.uploadedEver) }}
+        </span>
+      </div>
+      <div class="col-span-4 row-span-1">
+        <ShareIcon class="stroke-secondary w-5 h-5 float-left block" />
+        <span class="pl-1">{{ torrent.peersSendingToUs }} (of {{ torrent.peers.length }} peers) </span>
       </div>
     </div>
 
@@ -20,14 +40,37 @@
 import {defineComponent, PropType} from "vue";
 import PercentageCircle from '@/components/Utils/PercentageCircle.vue';
 import {Torrent} from "@/models";
+import { ArrowCircleDownIcon,
+  ArrowCircleUpIcon,
+  StopIcon,
+  ExclamationCircleIcon,
+  RefreshIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
+  DownloadIcon,
+  UploadIcon
+} from '@heroicons/vue/solid';
+import {
+  ShareIcon
+} from '@heroicons/vue/outline';
 
 export default defineComponent({
   name: "TorrentMenuItem",
   components: {
-    PercentageCircle
+    PercentageCircle,
+    ArrowCircleDownIcon,
+    ArrowCircleUpIcon,
+    StopIcon,
+    ExclamationCircleIcon,
+    RefreshIcon,
+    ChevronUpIcon,
+    ChevronDownIcon,
+    DownloadIcon,
+    UploadIcon,
+    ShareIcon
   },
   mounted() {
-    console.log("hrsize: ", this.torrent.percentDone);
+    console.log("rate: ", this.torrent.rateDownload);
   },
   props: {
     torrent: {
@@ -35,10 +78,13 @@ export default defineComponent({
       required: true
     }
   },
+  computed: {
+
+  },
   methods: {
     humanReadableSize(size: number) : string {
-      let hrSize = "N/A";
-      if (size !== undefined) {
+      let hrSize = "0";
+      if (size) {
         const k = size / 1024.0
         const m = size / (1024.0 * 1024.0);
         const g = size / ((1024.0 * 1024.0) * 1024.0);
@@ -57,7 +103,45 @@ export default defineComponent({
         }
       }
       return hrSize;
+    },
+    formatStatus(status: number) {
+      let component;
+      switch(status) {
+        case 0:
+           component = "StopIcon";
+          break;
+        case 1:
+        case 2:
+          component = "RefreshIcon";
+          break;
+        case 3:
+        case 4:
+          component = "ArrowCircleDownIcon";
+          break;
+        case 5:
+        case 6:
+          component = "ArrowCircleUpIcon";
+          break;
+      }
+      return component;
     }
   }
 })
 </script>
+
+<style>
+.name svg {
+  display: block;
+  float: left;
+}
+
+/*.speeds svg {*/
+/*  display: block;*/
+/*  float: left;*/
+/*}*/
+
+/*.speeds span {*/
+/*  display: block;*/
+/*  float: left;*/
+/*}*/
+</style>

@@ -1,6 +1,7 @@
 <template>
   <div class="w-1/2 min-w-64 h-screen bg-primary-light text-gray torrent-menu overflow-y-scroll">
     <div class="filtering">
+      <input type="text" name="search" id="search" v-model="search" />
       <select name="status" id="filteredStatus" v-model="selectedStatus">
         <option value=-1>All</option>
         <option value=0>Stopped</option>
@@ -38,6 +39,7 @@ export default defineComponent({
     return {
       torrents: [] as Torrent[],
       selectedStatus: -1,
+      search: ""
     }
   },
   mounted() {
@@ -51,6 +53,9 @@ export default defineComponent({
       setTimeout(() => {
         this.getTorrents();
       }, 1000);
+    },
+    search: function() {
+      this.getTorrents();
     }
   },
   computed: {
@@ -63,9 +68,10 @@ export default defineComponent({
         .then((torrents) => {
           if (this.selectedStatus !== -1) {
             this.torrents = torrents.filter((t) => {
-              console.log("selected: ", typeof this.selectedStatus, "t status: ", typeof t.status);
-              return t.status === parseInt(this.selectedStatus);
-            })
+              return t.status === parseInt(this.selectedStatus.toString());
+            }).filter((t) => {
+              return t.name?.includes(this.search);
+            });
           } else {
             this.torrents = torrents;
           }

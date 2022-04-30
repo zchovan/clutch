@@ -54,11 +54,8 @@ export const store = createStore({
             });
         },
         disconnect({commit}) {
-            // return new Promise((resolve) => {
-                commit('setConnectionStatus', Status.NOT_CONNECTED);
-                commit('setCurrentConnection', null);
-                // resolve('disconnected');
-            // });
+            commit('setConnectionStatus', Status.NOT_CONNECTED);
+            commit('setCurrentConnection', null);
         },
         deleteConnection(context, payload) {
             context.commit('deleteConnection', payload);

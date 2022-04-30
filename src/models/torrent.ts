@@ -7,6 +7,13 @@ import { FileStats, Label, Peer, PeersFrom, Tracker, TrackerStats } from ".";
  */
 export class Torrent {
     /**
+     * Constructor for ingesting plain objects
+     */
+    constructor(data : Partial<Torrent>) {
+        Object.assign(this, data);
+    }
+
+    /**
      *
      * @type {number}
      * @memberof Torrent
@@ -305,13 +312,13 @@ export class Torrent {
      * @type {number}
      * @memberof Torrent
      */
-    private _rateDownloadBs: number | undefined;
+    private _rateDownload: number | undefined;
     /**
      *
      * @type {number}
      * @memberof Torrent
      */
-    private _rateUploadBs: number | undefined;
+    private _rateUpload: number | undefined;
     /**
      *
      * @type {number}
@@ -831,20 +838,20 @@ export class Torrent {
         this._queuePosition = value;
     }
 
-    get rateDownloadBs(): number | undefined {
-        return this._rateDownloadBs;
+    get rateDownload(): number | undefined {
+        return this._rateDownload;
     }
 
-    set rateDownloadBs(value: number | undefined) {
-        this._rateDownloadBs = value;
+    set rateDownload(value: number | undefined) {
+        this._rateDownload = value;
     }
 
-    get rateUploadBs(): number | undefined {
-        return this._rateUploadBs;
+    get rateUpload(): number | undefined {
+        return this._rateUpload;
     }
 
-    set rateUploadBs(value: number | undefined) {
-        this._rateUploadBs = value;
+    set rateUpload(value: number | undefined) {
+        this._rateUpload = value;
     }
 
     get recheckProgress(): number | undefined {

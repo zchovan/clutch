@@ -53,7 +53,7 @@ export default defineComponent( {
 <style>
 .circular-chart {
   display: block;
-  margin: 10px auto;
+  /*margin: 10px auto;*/
   max-width: 70px;
   max-height: 70px;
 }
