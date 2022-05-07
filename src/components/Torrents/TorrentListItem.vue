@@ -1,44 +1,51 @@
 <template>
   <div class="torrent-list-item
-    flex-none
-    w-full
-    w-max-full
-    bg-primary-lighter rounded-xl
-    my-3">
-    <div class="grid grid-cols-5 gap-1 p-1 w-full">
-      <div class="col-span-4 align-baseline  ">
-        <div class="float-left">
-          <component
-              class="w-6 h-6 m-0 inline mb-1.5 mr-1 fill-secondary"
-              :is="formatStatus(torrent.status)" />
-        </div>
-        <div class="break-all float-left">
-          <span class="text-xl inline m-0 break-all">{{ torrent.name }}</span>
+    flex flex-row
+    p-3
+    bg-primary-lighter rounded-xl my-3
+    ">
+    <div id="left-side" class="flex-1">
+      <div class="flex flex-row ">
+        <component
+            class="w-6 h-6  fill-secondary"
+            :is="formatStatus(torrent.status)" />
+        <div class="torrent-name">
+          <span class="text-xl break-all">{{ torrent.name }}</span>
         </div>
       </div>
-      <div class="col-span-1 row-span-3 justify-items-end">
-        <PercentageCircle :percentage="torrent.percentDone * 100" class=""/>
-        <div class="speeds ">
-          <ChevronDownIcon class="fill-secondary w-5 h-5 float-left block" />
-          <span class="float-left block">{{ humanReadableSize(torrent.rateDownload) }}/s</span>
-          <ChevronUpIcon class="fill-secondary w-5 h-5 float-left block" />
-          <span class="float-left block">{{ humanReadableSize(torrent.rateUpload) }}/s</span>
-        </div>
-      </div>
-      <div class="col-span-4 row-span-1 pl-1">
-        <DownloadIcon class="fill-secondary w-5 h-5 float-left block" />
-        <span class="pl-1"> {{ humanReadableSize(torrent.sizeWhenDone - torrent.leftUntilDone) }}
+      <div class="downloaded flex flex-row">
+        <DownloadIcon class="fill-secondary w-5 h-5" />
+        <span class=""> {{ humanReadableSize(torrent.sizeWhenDone - torrent.leftUntilDone) }}
           ({{ humanReadableSize(torrent.sizeWhenDone) }})
         </span>
       </div>
-      <div class="col-span-4 row-span-1 pl-1">
-        <UploadIcon class="fill-secondary w-5 h-5 float-left block" />
-        <span class="pl-1"> {{ humanReadableSize(torrent.uploadedEver) }}
+      <div class="uploaded flex flex-row">
+        <UploadIcon class="fill-secondary w-5 h-5 " />
+        <span class=""> {{ humanReadableSize(torrent.uploadedEver) }}
         </span>
       </div>
-      <div class="col-span-4 row-span-1 pl-1 pb-2">
-        <ShareIcon class="stroke-secondary w-5 h-5 float-left block" />
-        <span class="pl-1">{{ torrent.peersSendingToUs }} (of {{ torrent.peers.length }} peers) </span>
+      <div class="peers flex flex-row">
+        <ClockIcon class="fill-secondary w-5 h-5 " />
+        <span class="pl-1">
+          {{ humanReadableTime(torrent.eta) }}
+<!--          {{ torrent.peersSendingToUs }} (of {{ torrent.peers.length }} peers) -->
+        </span>
+      </div>
+    </div>
+    <div id="right-side" class="w-36 min-w-36 flex flex-row justify-end">
+      <div class="flex flex-col align-middle justify-center">
+        <div >
+          <PercentageCircle :percentage="torrent.percentDone * 100" class="mx-auto"/>
+        </div>
+        <div class="speeds mt-2 ">
+
+            <ChevronDownIcon class="fill-secondary w-5 h-5 float-left block" />
+            <span class="float-left block">{{ humanReadableSize(torrent.rateDownload) }}/s</span>
+
+            <ChevronUpIcon class="fill-secondary w-5 h-5 float-left block" />
+            <span class="float-left block">{{ humanReadableSize(torrent.rateUpload) }}/s</span>
+
+        </div>
       </div>
     </div>
 
@@ -57,7 +64,8 @@ import { ArrowCircleDownIcon,
   ChevronUpIcon,
   ChevronDownIcon,
   DownloadIcon,
-  UploadIcon
+  UploadIcon,
+  ClockIcon
 } from '@heroicons/vue/solid';
 import {
   ShareIcon
@@ -76,7 +84,9 @@ export default defineComponent({
     ChevronDownIcon,
     DownloadIcon,
     UploadIcon,
-    ShareIcon
+    ShareIcon,
+    ClockIcon
+
   },
   mounted() {
     console.log("rate: ", this.torrent.rateDownload);
@@ -91,6 +101,13 @@ export default defineComponent({
 
   },
   methods: {
+    humanReadableTime(seconds: number) : string {
+      if (seconds === -1) {
+        return "N/A";
+      }
+      return new Date(seconds * 1000).toISOString().substring(11, 8);
+
+    },
     humanReadableSize(size: number) : string {
       let hrSize = "0";
       if (size) {
