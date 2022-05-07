@@ -1,11 +1,20 @@
 <template>
-  <div class="bg-primary-lighter rounded-xl m-2 mr-1 p-2">
-    <div class="grid grid-cols-5 gap-1 p-1">
-      <div class="col-span-4 align-baseline">
-        <component
-            class="w-6 h-6 m-0 inline mb-1.5 mr-1 fill-secondary"
-            :is="formatStatus(torrent.status)" />
-        <span class="text-xl inline m-0">{{ torrent.name }}</span>
+  <div class="torrent-list-item
+    flex-none
+    w-full
+    w-max-full
+    bg-primary-lighter rounded-xl
+    my-3">
+    <div class="grid grid-cols-5 gap-1 p-1 w-full">
+      <div class="col-span-4 align-baseline  ">
+        <div class="float-left">
+          <component
+              class="w-6 h-6 m-0 inline mb-1.5 mr-1 fill-secondary"
+              :is="formatStatus(torrent.status)" />
+        </div>
+        <div class="break-all float-left">
+          <span class="text-xl inline m-0 break-all">{{ torrent.name }}</span>
+        </div>
       </div>
       <div class="col-span-1 row-span-3 justify-items-end">
         <PercentageCircle :percentage="torrent.percentDone * 100" class=""/>
@@ -16,18 +25,18 @@
           <span class="float-left block">{{ humanReadableSize(torrent.rateUpload) }}/s</span>
         </div>
       </div>
-      <div class="col-span-4 row-span-1">
+      <div class="col-span-4 row-span-1 pl-1">
         <DownloadIcon class="fill-secondary w-5 h-5 float-left block" />
         <span class="pl-1"> {{ humanReadableSize(torrent.sizeWhenDone - torrent.leftUntilDone) }}
           ({{ humanReadableSize(torrent.sizeWhenDone) }})
         </span>
       </div>
-      <div class="col-span-4 row-span-1">
+      <div class="col-span-4 row-span-1 pl-1">
         <UploadIcon class="fill-secondary w-5 h-5 float-left block" />
         <span class="pl-1"> {{ humanReadableSize(torrent.uploadedEver) }}
         </span>
       </div>
-      <div class="col-span-4 row-span-1">
+      <div class="col-span-4 row-span-1 pl-1 pb-2">
         <ShareIcon class="stroke-secondary w-5 h-5 float-left block" />
         <span class="pl-1">{{ torrent.peersSendingToUs }} (of {{ torrent.peers.length }} peers) </span>
       </div>

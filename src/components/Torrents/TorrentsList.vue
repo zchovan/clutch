@@ -1,6 +1,10 @@
 <template>
-  <div class="w-1/2 min-w-64 h-screen bg-primary-light text-gray torrent-menu overflow-y-scroll">
-    <div class="filtering">
+  <div class="w-1/2
+    flex flex-col
+    h-screen
+    bg-primary-light text-gray ">
+    <div class="filtering
+      flex h-16">
       <input type="text" name="search" id="search" v-model="search" />
       <select name="status" id="filteredStatus" v-model="selectedStatus">
         <option value=-1>All</option>
@@ -10,10 +14,18 @@
       </select>
       <span>count: {{ torrents.length }}</span>
     </div>
-    <torrent-list-item
-      v-for="torrent in torrents"
-      :torrent="torrent"
-    />
+    <div class="torrent-list
+      overflow-y-scroll
+      flex-1
+      h-full
+      w-full
+      mx-auto
+      px-3">
+      <torrent-list-item
+          v-for="torrent in torrents"
+          :torrent="torrent"
+      />
+    </div>
   </div>
 </template>
 

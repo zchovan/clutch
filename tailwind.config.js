@@ -1,5 +1,5 @@
 module.exports = {
-    content: 
+    content: [
         "./index.html",
         "./src/**/*.{vue,js,ts,jsx,tsx}"
     ],
@@ -42,7 +42,7 @@ module.exports = {
             // 'bg_current_word':  '#32302f'
         },
         fontFamily: {
-            'roboto': 'roboto']
+            'roboto': 'roboto'
         },
         extend: {}
     }
