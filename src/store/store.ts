@@ -1,9 +1,8 @@
-import { InjectionKey } from 'vue'
-import { createStore, Store, useStore as baseUseStore } from 'vuex'
+import { InjectionKey } from 'vue';
+import { createStore, Store, useStore as baseUseStore } from 'vuex';
 import { State, Status } from './state';
 import Connection from '../models/connection';
 import createPersistedState from 'vuex-persistedstate';
-import Client from "@/util/client";
 
 // define injection key
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -14,7 +13,7 @@ export const store = createStore({
             status: Status.NOT_CONNECTED,
             connections: <Array<Connection>>[],
             currentConnection: <Connection>{}
-        }
+        };
     },
     mutations: {
         setConnectionStatus(state:State, status:Status) {
@@ -82,5 +81,5 @@ export const store = createStore({
 
 // define your own `useStore` composition function
 export function useStore () {
-    return baseUseStore(key)
+    return baseUseStore(key);
 }

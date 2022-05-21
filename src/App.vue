@@ -1,27 +1,24 @@
 <template>
   <div class="relative h-screen flex">
-    <Sidebar />
+    <SideBar />
     <router-view />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
-import Sidebar from './components/Sidebar.vue'
-
+import { defineComponent } from 'vue';
+import SideBar from './components/Sidebar.vue';
 
 
 export default defineComponent({
-  name: 'App',
-  components: {
-    HelloWorld,
-    Sidebar
-  },
-  mounted: function() {
-      this.$store.dispatch('disconnect');
-  }
-})
+    name: 'App',
+    components: {
+        SideBar
+    },
+    mounted: function() {
+        this.$store.dispatch('disconnect');
+    }
+});
 </script>
 
 <style>

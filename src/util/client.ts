@@ -1,10 +1,10 @@
-import axios, { AxiosInstance } from "axios";
-import Connection from "@/models/connection";
-import {QUEUE, TORRENT_FIELDS} from "@/util/util";
-import {TorrentParameters} from "@/models/torrentParams";
-import {NewTorrentDescriptor} from "@/models/new-torrent-descriptor";
-import {SessionConfig} from "@/models/session-config";
-import {Torrent} from "@/models";
+import axios, { AxiosInstance } from 'axios';
+import Connection from '@/models/connection';
+import {QUEUE, TORRENT_FIELDS} from '@/util/util';
+import {TorrentParameters} from '@/models/torrentParams';
+import {NewTorrentDescriptor} from '@/models/new-torrent-descriptor';
+import {SessionConfig} from '@/models/session-config';
+import {Torrent} from '@/models';
 
 export default class Client {
     connection:Connection;
@@ -24,8 +24,8 @@ export default class Client {
                 baseURL: 'http://' + this.connection.url + ':' + this.connection.port,
                 method: 'POST',
                 headers: {
-                    // @ts-ignore
-                    'x-transmission-session-id': this.connection.csrf_token
+                    'x-transmission-session-id':
+                        (this.connection.csrf_token !== undefined) ? this.connection.csrf_token : ''
                 },
                 auth: {
                     username: this.connection.username,
@@ -37,15 +37,15 @@ export default class Client {
                 baseURL: this.connection.url,
                 method: 'POST',
                 headers: {
-                    // @ts-ignore
-                    'x-transmission-session-id': this.connection.csrf_token
+                    'x-transmission-session-id':
+                        (this.connection.csrf_token !== undefined) ? this.connection.csrf_token : ''
                 }
             });
         }
     }
     setupInterceptors() {
         if (this.client !== undefined) {
-            let connection = this.connection;
+            const connection = this.connection;
             const axiosApiInstance = this.client;
             // axiosApiInstance.interceptors.request.use()
             axiosApiInstance.interceptors.response.use(
@@ -60,7 +60,6 @@ export default class Client {
                     if (error.response.status == 409) {
                         originalRequest._retry = true;
                         console.log('interceptor csrf token: ', error.response.headers['x-transmission-session-id']);
-                        // @ts-ignore
                         originalRequest.headers['x-transmission-session-id'] =
                             error.response.headers['x-transmission-session-id'];
                         connection.csrf_token = error.response.headers['x-transmission-session-id'];
@@ -107,7 +106,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -130,7 +129,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -153,7 +152,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -176,7 +175,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -199,7 +198,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -245,7 +244,7 @@ export default class Client {
      */
     async setTorrent(parameters:TorrentParameters, ids:number|Array<number>) {
         if (parameters.ids === undefined) {
-           parameters.ids = ids;
+            parameters.ids = ids;
         }
         return new Promise((resolve, reject) => {
             if (this.client !== undefined) {
@@ -256,7 +255,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -302,15 +301,15 @@ export default class Client {
                         'fields': TORRENT_FIELDS,
                     },
                 }).then((response) => {
-                    let objArray : Object[] = response.data.arguments.torrents;
-                    let typedArray : Torrent[] = [];
+                    const objArray : Record<string, unknown>[] = response.data.arguments.torrents;
+                    const typedArray : Torrent[] = [];
                     for (let i = 0; i < objArray.length; i++) {
                         typedArray.push(new Torrent(objArray[i]));
                     }
                     resolve(typedArray);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -361,7 +360,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -391,7 +390,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -412,7 +411,7 @@ export default class Client {
      *
      *    Response arguments: none
      */
-    async moveTorrent(ids:number|Array<number>, location:string, move:boolean = false) {
+    async moveTorrent(ids:number|Array<number>, location:string, move = false) {
         return new Promise((resolve, reject) => {
             if (this.client !== undefined) {
                 this.client.post(this.connection.rpc_path, {
@@ -426,7 +425,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -464,7 +463,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -489,7 +488,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -502,7 +501,19 @@ export default class Client {
      *   argument if present, or all supported fields (see 4.1) otherwise.
      */
     async sessionGet() {
-
+        return new Promise((resolve, reject) => {
+            if (this.client !== undefined) {
+                this.client.post(this.connection.rpc_path, {
+                    'method': 'session-get',
+                }).then((response) => {
+                    resolve(response.data);
+                }).catch((error) => {
+                    reject(error);
+                });
+            } else {
+                reject('Client is undefined');
+            }
+        });
     }
 
     /**
@@ -544,7 +555,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -565,7 +576,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -589,7 +600,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -612,7 +623,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -640,7 +651,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }
@@ -677,7 +688,7 @@ export default class Client {
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
-                })
+                });
             } else {
                 reject('Client is undefined');
             }

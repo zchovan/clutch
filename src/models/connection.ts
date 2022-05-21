@@ -46,7 +46,7 @@ export default class Connection {
      * @type {string}
      * @memberof Connection
      */
-    csrf_token: string|undefined;
+    csrf_token?: string;
 
     constructor(
         name: string,
@@ -63,6 +63,6 @@ export default class Connection {
         this.rpc_path = rpc_path,
         this.auth_required = auth_required,
         this.username = username,
-        this.password = password
+        this.password = password;
     }
 }

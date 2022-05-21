@@ -1,4 +1,4 @@
-import { FileStats, Label, Peer, PeersFrom, Tracker, TrackerStats } from ".";
+import { FileStats, Label, Peer, PeersFrom, Tracker, TrackerStats } from '.';
 
 /**
  * 

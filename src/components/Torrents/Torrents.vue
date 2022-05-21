@@ -8,15 +8,15 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import TorrentsList from "./TorrentsList.vue";
-import TorrentDetail from "./TorrentDetail.vue";
+import {defineComponent} from 'vue';
+import TorrentsList from './TorrentsList.vue';
+import TorrentDetail from './TorrentDetail.vue';
 
 export default defineComponent({
-  name: 'Torrents',
-  components: {
-    TorrentsList,
-    TorrentDetail
-  }
-})
+    name: 'Torrents',
+    components: {
+        TorrentsList,
+        TorrentDetail
+    }
+});
 </script>
