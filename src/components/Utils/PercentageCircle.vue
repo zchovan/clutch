@@ -1,52 +1,60 @@
 <template>
-  <svg viewBox="0 0 36 36" class="circular-chart">
-    <path class="circle"
-          :stroke-dasharray="strokeDasharray"
-          d="M18 2.0845
+  <svg
+    viewBox="0 0 36 36"
+    class="circular-chart"
+  >
+    <path
+      class="circle"
+      :stroke-dasharray="strokeDasharray"
+      d="M18 2.0845
       a 15.9155 15.9155 0 0 1 0 31.831
       a 15.9155 15.9155 0 0 1 0 -31.831"
     />
-    <text x="18" y="20.35" class="percentage">{{formattedPercentage(percentage)}}%</text>
+    <text
+      x="18"
+      y="20.35"
+      class="percentage"
+    >{{ formattedPercentage(percentage) }}%</text>
   </svg>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent} from 'vue';
 
 export default defineComponent( {
-  name: "PercentageCircle",
-  props: {
-    'size': {
-      type: Number,
-      default: 15,
-      required: false
+    name: 'PercentageCircle',
+    props: {
+        'size': {
+            type: Number,
+            default: 15,
+            required: false
+        },
+        'percentage': {
+            type: Number,
+            default: 100,
+            required: false
+        },
+        'strokeWidth': {
+            type: Number,
+            default: 1,
+            required: false
+        },
+        'color': {
+            type: String,
+            default: '#444',
+            required: false
+        }
     },
-    'percentage': {
-      type: Number,
-      default: 100,
-      required: false
+    computed: {
+        strokeDasharray() {
+            return this.percentage + ', 100';
+        }
     },
-    'strokeWidth': {
-      type: Number,
-      default: 1,
-      required: false
-    },
-    'color': {
-      type: String,
-      default: '#444',
-      required: false
+    methods: {
+        formattedPercentage(percent: number) : number {
+            return Math.floor(percent);
+        }
     }
-  },
-  computed: {
-    strokeDasharray() {
-      return this.percentage + ", 100";
-    }
-  },
-  methods: {
-    formattedPercentage(percent: number) : number {
-      return Math.floor(percent);
-    }
-  }
 });
 </script>
 
