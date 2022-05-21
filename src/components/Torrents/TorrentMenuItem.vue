@@ -4,18 +4,14 @@
   </div>
 </template>
 
-<script>
-
-
-
-export default {
-  name: 'TorrentMenuItem',
+<script lang="ts">
+import {defineComponent} from "vue";
+export default defineComponent({
+  name: "TorrentMenuItem",
   props: {
-    'name': {
-      type: String,
-      default: '',
-      required: true
+    name: {
+      type: String
     }
   }
-}
+})
 </script>

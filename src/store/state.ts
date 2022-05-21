@@ -1,4 +1,4 @@
-import Connection from "../models/connection";
+import Connection from "@/models/connection";
 
 /**
  *
@@ -8,7 +8,7 @@ import Connection from "../models/connection";
  export interface State {
     connections: Array<Connection>,
     status: Status,
-    currentConnection: Connection
+    currentConnection: Connection,
 }
 
 export enum Status {

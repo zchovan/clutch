@@ -1,33 +1,27 @@
 <template>
   <div class="relative h-screen flex">
-    <sidebar />
-    <!-- route outlet -->
-    <!-- component matched by the route will render here -->
+    <Sidebar />
     <router-view />
-  </div>  
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+import HelloWorld from './components/HelloWorld.vue'
 import Sidebar from './components/Sidebar.vue'
 
-export default {
-  name: 'App',
-  data() {
-    return {
-      torrents: "",
-      headers: {}
-    }
-  },
-  components: { 
-    Sidebar    
-  },
-  mounted() {
-    this.$store.dispatch('resetCurrentConnection');
-  },
-  methods: {
 
-  }  
-}
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    HelloWorld,
+    Sidebar
+  },
+  mounted: function() {
+      this.$store.dispatch('disconnect');
+  }
+})
 </script>
 
 <style>

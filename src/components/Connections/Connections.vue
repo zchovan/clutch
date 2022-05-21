@@ -1,4 +1,4 @@
-<template>    
+<template>
   <div class="flex w-full">
     <div class="w-1/3 min-w-64 h-screen bg-primary-light text-gray">
       <div>
@@ -6,9 +6,9 @@
           Connections
         </h1>
       </div>
-      <connection-list-item 
+      <connection-list-item
         v-for="connection in connections"
-        :name="connection.name" 
+        :name="connection.name"
         :key="connection.name"
         :auth-req="connection.auth_required"
         :host="connection.host"
@@ -18,116 +18,46 @@
       />
     </div>
     <div class="flex justify-center bg-primary-lighter text-gray w-2/3">
-      <div class="flex justify-center">
-        <div>
-          <div>
-            <h1 class="text-2xl my-3">
-              New connection details
-            </h1>
-          </div>
-          <div class="form-floating mb-3 xl:w-96">
-            <input
-              type="text"
-              class="form-input"
-              id="connection_name"
-              placeholder="Connection name"
-              v-model="name"
-            >
-            <label
-              for="connection_name"
-              class="text-gray-700"
-            >Connection name</label>
-          </div>
-          <div class="form-floating mb-3 xl:w-96">
-            <input
-              type="url"
-              class="form-input"
-              id="host"
-              placeholder="http://my.transmission.server"
-              v-model="host"
-            >
-            <label
-              for="host"
-              class="text-gray-700"
-            >Remote host</label>
-          </div>
-          <div class="form-floating mb-3 xl:w-96">
-            <input
-              type="text"
-              class="form-input"
-              id="port"
-              placeholder="9091"
-              v-model="port"
-            >
-            <label
-              for="port"
-              class="text-gray-700"
-            >Port</label>
-          </div>
-          <div class="form-floating mb-3 xl:w-96">
-            <input
-              type="text"
-              class="form-input"
-              id="rpc_path"
-              placeholder="/transmission/rpc"
-              v-model="rpc_path"
-            >
-            <label
-              for="rpc_path"
-              class="text-gray-700"
-            >RPC path</label>
-          </div>
-          <div class="form-check mb-3 xl:w-96">
-            <input
-              class="checkbox"
-              type="checkbox"
-              v-model="auth_required"
-              id="auth_required"
-            >
-            <label
-              class="form-check-label inline-block text-gray"
-              for="auth_required"
-            >
-              Authentication required
-            </label>
-          </div>
-          <div v-show="auth_required">
-            <div class="form-floating mb-3 xl:w-96">
-              <input
-                type="text"
-                class="form-input"
-                id="username"
-                placeholder="Username"
-                v-model="username"
-              >
-              <label
-                for="username"
-                class="text-gray-700"
-              >Username</label>
+      <div class="w-2/3">
+        <div class="">
+          <h1 class="text-2xl my-3">
+            New connection details
+          </h1>
+        </div>
+        <div class="">
+            <div class="flex flex-col mb-1">
+              <label class="text-lg mb-1" for="connection_name">Connection Name</label>
+              <input class="h-9" type="text" id="connection_name" name="connection_name" v-model="name">
             </div>
-            <div class="form-floating mb-3 xl:w-96">
-              <input
-                type="password"
-                class="form-input"
-                id="password"
-                placeholder="password"
-                v-model="password"
-              >
-              <label
-                for="password"
-                class="text-gray-700"
-              >Password</label>
+            <div class="flex flex-col mb-1">
+              <label class="text-lg mb-1" for="host">Remote host</label>
+              <input class="h-9" type="url" id="host" name="host" v-model="host">
             </div>
-          </div>
-          <div class="flex space-x-2 justify-center">
-            <button
-              @click="saveConnection"
-              type="button"
-              class="form-button"
-            >
+            <div class="flex flex-col mb-1">
+              <label class="text-lg mb-1" for="port">Port</label>
+              <input class="h-9" type="number" id="port" name="port" v-model="port">
+            </div>
+            <div class="flex flex-col mb-1">
+              <label class="text-lg mb-1" for="rpc_path">RPC path</label>
+              <input class="h-9" type="text" id="rpc_path" name="rpc_path" v-model="rpc_path" placeholder="/transmission/rpc">
+            </div>
+            <div class="flex flex-col mb-1 mt-6">
+              <label class="text-lg mb-1" for="auth_required">Authentication required</label>
+              <input class="h-9" type="checkbox" id="auth_required" name="auth_required" v-model="auth_required">
+            </div>
+            <div v-show="auth_required">
+              <div class="flex flex-col mb-4">
+                <label class="text-lg mb-1" for="username">Username</label>
+                <input class="h-9" type="text" id="username" name="username" v-model="username">
+              </div>
+              <div class="flex flex-col mb-1">
+                <label class="text-lg mb-1" for="password">Password</label>
+                <input class="h-9" type="password" id="password" name="password" v-model="password">
+              </div>
+            </div>
+            <button class="mt-6 px-3 py-2 rounded-sm bg-secondary text-white" @click="saveConnection()">
               Save
             </button>
-          </div>
         </div>
       </div>
     </div>
@@ -135,13 +65,24 @@
 </template>
 
 <script>
-import ConnectionListItem from './ConnectionListItem.vue'
-import Connection from '../../models/connection';
+import { defineComponent } from 'vue'
+import ConnectionListItem from "./ConnectionListItem.vue";
+import Input from "../../components/Form/Input.vue";
+import Connection from "@/models/connection";
 
-export default {
-  name: 'Connections',
+export default defineComponent({
+  name: "Connections",
   components: {
-    ConnectionListItem
+    ConnectionListItem,
+    Input
+  },
+  watch: {
+    connections: function() {
+      return this.$store.getters.getAllConnections;
+    }
+  },
+  mounted: function() {
+    this.getConnections();
   },
   data() {
     return {
@@ -156,20 +97,7 @@ export default {
       rpc_path: "/transmission/rpc",
     }
   },
-  watch: {
-    connections: function() {
-      return this.$store.getters.getAllConnections;
-    }
-  },
-  mounted: function() {
-    this.getConnections();
-  },
   methods: {
-    selectConnectionByName(name) {
-      const connections = this.$store.getters.getAllConnections;
-      this.selected_connection = connections.find(conn => conn.name === name)
-      console.log(this.selected_connection);
-    },
     saveConnection() {
       let new_connection = new Connection(
         this.name,
@@ -183,10 +111,16 @@ export default {
 
       this.$store.commit('addConnection', new_connection);
     },
-
     getConnections() {
       this.connections = this.$store.getters.getAllConnections;
-    }
+    },
+    selectConnectionByName(name) {
+      const connections = this.$store.getters.getAllConnections;
+      this.selected_connection = connections.find(conn => conn.name === name)
+    },
   }
-}
+})
 </script>
+
+<style>
+</style>

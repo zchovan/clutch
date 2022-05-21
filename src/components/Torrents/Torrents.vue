@@ -1,26 +1,22 @@
 <template>
-  <div class="flex-1">    
+  <div class="flex-1">
     <div class="flex">
-      <torrents-menu />          
-      <torrent-detail />        
+      <torrents-menu />
+      <torrent-detail />
     </div>
-    
-    <!-- <torrents-menu/> -->  
-  </div>    
+  </div>
 </template>
 
-<script>
-import TorrentsMenu from './TorrentsMenu.vue'
-import TorrentDetail from './TorrentDetail.vue'
+<script lang="ts">
+import {defineComponent} from "vue";
+import TorrentsMenu from "./TorrentsMenu.vue";
+import TorrentDetail from "./TorrentDetail.vue";
 
-export default {
+export default defineComponent({
   name: 'Torrents',
-  components: {    
+  components: {
     TorrentsMenu,
     TorrentDetail
-  },
-  props: {
-    
   }
-}
+})
 </script>

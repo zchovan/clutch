@@ -19,7 +19,7 @@
             Clutch
           </p>
         </div>
-      </div>        
+      </div>
       <div>
         <!-- <div class="-rotate-90 ml-8 text-secondary">
                     <p class="font-['roboto'] text-5xl font-bold">Torrents</p>
@@ -45,31 +45,31 @@
           <ChevronUpIcon class="fill-secondary w-3.5 h-3.5" />
           <p class="text-secondary">
             478kb/s
-          </p>                    
-        </div>            
+          </p>
+        </div>
         <div class="flex place-items-center ">
           <ChevronDownIcon class="fill-secondary w-3.5 h-3.5" />
           <p class="text-secondary">
             56.3kb/s
           </p>
-        </div> 
+        </div>
       </div>
-    </div>            
-  </div>    
+    </div>
+  </div>
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { ServerIcon, AdjustmentsIcon, ChevronUpIcon, ChevronDownIcon, DownloadIcon } from '@heroicons/vue/solid'
-export default {
+
+export default defineComponent({
   name: 'Sidebar',
   components: {
-      ServerIcon,
-      AdjustmentsIcon,
-      ChevronUpIcon,
-      ChevronDownIcon,
-      DownloadIcon
-  },
-  props: {
+    ServerIcon,
+    AdjustmentsIcon,
+    ChevronUpIcon,
+    ChevronDownIcon,
+    DownloadIcon
   }
-}
+})
 </script>

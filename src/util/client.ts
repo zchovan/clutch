@@ -13,37 +13,83 @@ export default class Client {
         connection:Connection
     ) {
         this.connection = connection;
-        this.initClient(connection);
+        this.initClient();
+        this.setupInterceptors();
+        // this.refreshToken();
     }
 
-    initClient(connection:Connection) {
-        if (connection.auth_required) {
+    initClient() {
+        if (this.connection.auth_required) {
             this.client = axios.create({
-                baseURL: 'http://' + connection.url + ':' + connection.port,
+                baseURL: 'http://' + this.connection.url + ':' + this.connection.port,
                 method: 'POST',
                 headers: {
                     // @ts-ignore
-                    'x-transmission-session-id': connection.csrf_token
+                    'x-transmission-session-id': this.connection.csrf_token
                 },
                 auth: {
-                    username: connection.username,
-                    password: connection.password
+                    username: this.connection.username,
+                    password: this.connection.password
                 },
             });
         } else {
             this.client = axios.create({
-                baseURL: connection.url,
+                baseURL: this.connection.url,
                 method: 'POST',
                 headers: {
                     // @ts-ignore
-                    'x-transmission-session-id': connection.csrf_token
+                    'x-transmission-session-id': this.connection.csrf_token
                 }
             });
         }
     }
+    setupInterceptors() {
+        if (this.client !== undefined) {
+            const axiosApiInstance = this.client;
+            // axiosApiInstance.interceptors.request.use()
+            axiosApiInstance.interceptors.response.use(
+                function (response) {
+                    console.log('intercepted okay');
+                    // don't do anything if no errors present
+                    return response;
+                },
+                function (error) {
+                    console.log('intercepted rejection');
+                    const originalRequest = error.config;
+                    if (error.response.status == 409) {
+                        originalRequest._retry = true;
+                        console.log('interceptor csrf token: ', error.response.headers['x-transmission-session-id']);
+                        // @ts-ignore
+                        originalRequest.headers['x-transmission-session-id'] =
+                            error.response.headers['x-transmission-session-id'];
+                        return axiosApiInstance(originalRequest);
+                    } else {
+                        return Promise.reject(error);
+                    }
+                });
+        }
+
+    }
 
     getInstance() {
         return this.client;
+    }
+
+    refreshToken() {
+        if (this.client !== undefined) {
+            this.client.post(this.connection.rpc_path, {
+                'arguments': {
+                    'fields': [
+                        'version'
+                    ]
+                },
+                'method': 'session-get'
+            }).then((response) => {
+               // nothing to do
+            }).catch((error) => {
+                this.connection.csrf_token = error.headers['x-transmission-session-id'];
+            });
+        }
     }
 
     /**
@@ -274,6 +320,7 @@ export default class Client {
                         'fields': TORRENT_FIELDS,
                     },
                 }).then((response) => {
+                    console.log('all torrents: ', response);
                     resolve(response.data.arguments.torrents);
                 }).catch((error) => {
                     reject(error);
@@ -465,8 +512,8 @@ export default class Client {
 
     /**
      * Request arguments: an optional "fields" array of keys (see 4.1)
-     *    Response arguments: key/value pairs matching the request's "fields"
-     *        argument if present, or all supported fields (see 4.1) otherwise.
+     * Response arguments: key/value pairs matching the request's "fields"
+     *   argument if present, or all supported fields (see 4.1) otherwise.
      */
     async sessionGet() {
 
