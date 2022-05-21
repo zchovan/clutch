@@ -22,10 +22,27 @@ module.exports = {
             'gray': '#8e9297',
             'gray-light': '#b9bbbe',
             'dark-gray': '#202225',
-            'white': '#FFF'
+            'white': '#FFF',
+            // 'bg0':              '#1d2021',
+            // 'bg1':              '#282828',
+            // 'bg2':              '#282828',
+            // 'bg3':              '#3c3836',
+            // 'bg4':              '#3c3836',
+            // 'bg5':              '#504945',
+            // 'bg_statusline1':   '#282828',
+            // 'bg_statusline2':   '#32302f',
+            // 'bg_statusline3':   '#504945',
+            // 'bg_diff_green':    '#32361a',
+            // 'bg_visual_green':  '#333e34',
+            // 'bg_diff_red':      '#3c1f1e',
+            // 'bg_visual_red':    '#442e2d',
+            // 'bg_diff_blue':     '#0d3138',
+            // 'bg_visual_blue':   '#2e3b3b',
+            // 'bg_visual_yellow': '#473c29',
+            // 'bg_current_word':  '#32302f'
         },
         fontFamily: {
-            'roboto': ['roboto']
+            'roboto': 'roboto'
         },
         extend: {}
     }
