@@ -29,4 +29,4 @@ jobs:
           yarn install
       - name: eslint
         run:
-          yarn run eslint -c "eslintrc.js" "src/**/*.{js,ts,vue}" "src/**/*.{js,ts,vue}" 
+          yarn run eslint -c "$GITHUB_WORKSPACE/eslintrc.js" "$GITHUB_WORKSPACE/src/**/*.{js,ts,vue}"
