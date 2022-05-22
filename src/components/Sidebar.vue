@@ -63,13 +63,13 @@ import { defineComponent } from 'vue';
 import { ServerIcon, AdjustmentsIcon, ChevronUpIcon, ChevronDownIcon, DownloadIcon } from '@heroicons/vue/solid';
 
 export default defineComponent({
-    name: 'SideBar',
-    components: {
-        ServerIcon,
-        AdjustmentsIcon,
-        ChevronUpIcon,
-        ChevronDownIcon,
-        DownloadIcon
-    }
+  name: 'SideBar',
+  components: {
+    ServerIcon,
+    AdjustmentsIcon,
+    ChevronUpIcon,
+    ChevronDownIcon,
+    DownloadIcon
+  }
 });
 </script>

@@ -22,39 +22,39 @@
 import {defineComponent} from 'vue';
 
 export default defineComponent( {
-    name: 'PercentageCircle',
-    props: {
-        'size': {
-            type: Number,
-            default: 15,
-            required: false
-        },
-        'percentage': {
-            type: Number,
-            default: 100,
-            required: false
-        },
-        'strokeWidth': {
-            type: Number,
-            default: 1,
-            required: false
-        },
-        'color': {
-            type: String,
-            default: '#444',
-            required: false
-        }
+  name: 'PercentageCircle',
+  props: {
+    'size': {
+      type: Number,
+      default: 15,
+      required: false
     },
-    computed: {
-        strokeDasharray() {
-            return this.percentage + ', 100';
-        }
+    'percentage': {
+      type: Number,
+      default: 100,
+      required: false
     },
-    methods: {
-        formattedPercentage(percent: number) : number {
-            return Math.floor(percent);
-        }
+    'strokeWidth': {
+      type: Number,
+      default: 1,
+      required: false
+    },
+    'color': {
+      type: String,
+      default: '#444',
+      required: false
     }
+  },
+  computed: {
+    strokeDasharray() {
+      return this.percentage + ', 100';
+    }
+  },
+  methods: {
+    formattedPercentage(percent: number) : number {
+      return Math.floor(percent);
+    }
+  }
 });
 </script>
 

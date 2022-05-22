@@ -1,5 +1,5 @@
 import { Store } from 'vuex';
-import {Status} from '@/store/state';
+import { Status } from '@/store/state';
 
 
 declare module '@vue/runtime-core' {

@@ -10,30 +10,27 @@
       class="filtering
       flex h-16"
     >
-      <input
+      <FormKit
         id="search"
         v-model="search"
         type="text"
         name="search"
-      >
-      <select
+        placeholder="Search"
+        outer-class="$reset mt-2"
+      />
+      <FormKit
         id="filteredStatus"
         v-model="selectedStatus"
         name="status"
-      >
-        <option value="-1">
-          All
-        </option>
-        <option value="0">
-          Stopped
-        </option>
-        <option value="4">
-          Downloading
-        </option>
-        <option value="6">
-          Seeding
-        </option>
-      </select>
+        type="select"
+        outer-class="$reset mt-2"
+        :options="[
+          { label: 'All', value: -1},
+          { label: 'Stopped', value: 0},
+          { label: 'Downloading', value: 4},
+          { label: 'Seeding', value: 6},
+        ]"
+      />
       <span>count: {{ torrents.length }}</span>
     </div>
     <div
@@ -63,63 +60,63 @@ import {Torrent} from '@/models';
 import {useToast} from 'vue-toastification';
 
 export default defineComponent({
-    name: 'TorrentsList',
-    components: {
-        TorrentListItem
-    },
-    setup() {
-        const toast = useToast();
+  name: 'TorrentsList',
+  components: {
+    TorrentListItem
+  },
+  setup() {
+    const toast = useToast();
 
-        return { toast };
-    },
-    data() {
-        return {
-            torrents: [] as Torrent[],
-            selectedStatus: -1,
-            search: ''
-        };
-    },
-    computed: {
+    return { toast };
+  },
+  data() {
+    return {
+      torrents: [] as Torrent[],
+      selectedStatus: -1,
+      search: ''
+    };
+  },
+  computed: {
 
+  },
+  watch: {
+    torrents: function() {
+      setTimeout(() => {
+        this.getTorrents();
+      }, 1000);
     },
-    watch: {
-        torrents: function() {
-            setTimeout(() => {
-                this.getTorrents();
-            }, 1000);
-        },
-        search: function() {
-            this.getTorrents();
-        }
-    },
-    mounted() {
-        if (this.$store.getters.getStatus === Status.CONNECTED) {
-            console.log('getting torrents');
-            this.getTorrents();
-        }
-    },
-    methods: {
-        getTorrents() {
-            let client = new Client(this.$store.getters.getCurrentConnection);
-            client.getAllTorrents()
-                .then((torrents) => {
-                    if (this.selectedStatus !== -1) {
-                        this.torrents = torrents.filter((t) => {
-                            return t.status === parseInt(this.selectedStatus.toString());
-                        }).filter((t) => {
-                            return t.name?.includes(this.search);
-                        });
-                    } else {
-                        this.torrents = torrents;
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    this.toast.error(error);
-                });
-
-        }
+    search: function() {
+      this.getTorrents();
     }
+  },
+  mounted() {
+    if (this.$store.getters.getStatus === Status.CONNECTED) {
+      console.log('getting torrents');
+      this.getTorrents();
+    }
+  },
+  methods: {
+    getTorrents() {
+      let client = new Client(this.$store.getters.getCurrentConnection);
+      client.getAllTorrents()
+        .then((torrents) => {
+          if (this.selectedStatus !== -1) {
+            this.torrents = torrents.filter((t) => {
+              return t.status === parseInt(this.selectedStatus.toString());
+            }).filter((t) => {
+              return t.name?.includes(this.search);
+            });
+          } else {
+            this.torrents = torrents;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.toast.error(error);
+        });
+
+    }
+  }
 });
 </script>
 <style>

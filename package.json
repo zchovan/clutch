@@ -16,7 +16,8 @@
     "tailwind:watch": "tailwindcss -i ./index.css -o ./dist_electron/index.css --watch"
   },
   "dependencies": {
-    "@formkit/vue": "^1.0.0-beta.6",
+    "@formkit/themes": "^1.0.0-beta.8",
+    "@formkit/vue": "^1.0.0-beta.8",
     "@heroicons/vue": "^1.0.6",
     "axios": "^0.26.1",
     "vue": "^3.2.31",
@@ -37,6 +38,7 @@
     "electron-builder": "^22.11.7",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.16.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-vue": "^9.0.1",
     "postcss": "^8.4.8",
     "tailwindcss": "^3.0.23",

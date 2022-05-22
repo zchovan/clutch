@@ -11,13 +11,13 @@ import SideBar from './components/Sidebar.vue';
 
 
 export default defineComponent({
-    name: 'App',
-    components: {
-        SideBar
-    },
-    mounted: function() {
-        this.$store.dispatch('disconnect');
-    }
+  name: 'App',
+  components: {
+    SideBar
+  },
+  mounted: function() {
+    this.$store.dispatch('disconnect');
+  }
 });
 </script>
 
