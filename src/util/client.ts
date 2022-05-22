@@ -7,73 +7,73 @@ import {SessionConfig} from '@/models/session-config';
 import {Torrent} from '@/models';
 
 export default class Client {
-    connection:Connection;
-    client?:AxiosInstance;
+  connection:Connection;
+  client?:AxiosInstance;
 
-    constructor(
-        connection:Connection
-    ) {
-        this.connection = connection;
-        this.initClient();
-        this.setupInterceptors();
-    }
+  constructor(
+    connection:Connection
+  ) {
+    this.connection = connection;
+    this.initClient();
+    this.setupInterceptors();
+  }
 
-    initClient() {
-        if (this.connection.auth_required) {
-            this.client = axios.create({
-                baseURL: 'http://' + this.connection.url + ':' + this.connection.port,
-                method: 'POST',
-                headers: {
-                    'x-transmission-session-id':
+  initClient() {
+    if (this.connection.auth_required) {
+      this.client = axios.create({
+        baseURL: 'http://' + this.connection.url + ':' + this.connection.port,
+        method: 'POST',
+        headers: {
+          'x-transmission-session-id':
                         (this.connection.csrf_token !== undefined) ? this.connection.csrf_token : ''
-                },
-                auth: {
-                    username: this.connection.username,
-                    password: this.connection.password
-                },
-            });
-        } else {
-            this.client = axios.create({
-                baseURL: this.connection.url,
-                method: 'POST',
-                headers: {
-                    'x-transmission-session-id':
+        },
+        auth: {
+          username: this.connection.username,
+          password: this.connection.password
+        },
+      });
+    } else {
+      this.client = axios.create({
+        baseURL: this.connection.url,
+        method: 'POST',
+        headers: {
+          'x-transmission-session-id':
                         (this.connection.csrf_token !== undefined) ? this.connection.csrf_token : ''
-                }
-            });
         }
+      });
     }
-    setupInterceptors() {
-        if (this.client !== undefined) {
-            const connection = this.connection;
-            const axiosApiInstance = this.client;
-            // axiosApiInstance.interceptors.request.use()
-            axiosApiInstance.interceptors.response.use(
-                function (response) {
-                    console.log('intercepted okay');
-                    // don't do anything if no errors present
-                    return response;
-                },
-                function (error) {
-                    console.log('intercepted rejection');
-                    const originalRequest = error.config;
-                    if (error.response.status == 409) {
-                        originalRequest._retry = true;
-                        console.log('interceptor csrf token: ', error.response.headers['x-transmission-session-id']);
-                        originalRequest.headers['x-transmission-session-id'] =
+  }
+  setupInterceptors() {
+    if (this.client !== undefined) {
+      const connection = this.connection;
+      const axiosApiInstance = this.client;
+      // axiosApiInstance.interceptors.request.use()
+      axiosApiInstance.interceptors.response.use(
+        function (response) {
+          console.log('intercepted okay');
+          // don't do anything if no errors present
+          return response;
+        },
+        function (error) {
+          console.log('intercepted rejection');
+          const originalRequest = error.config;
+          if (error.response.status == 409) {
+            originalRequest._retry = true;
+            console.log('interceptor csrf token: ', error.response.headers['x-transmission-session-id']);
+            originalRequest.headers['x-transmission-session-id'] =
                             error.response.headers['x-transmission-session-id'];
-                        connection.csrf_token = error.response.headers['x-transmission-session-id'];
-                        return axiosApiInstance(originalRequest);
-                    } else {
-                        return Promise.reject(error);
-                    }
-                });
-        }
-
+            connection.csrf_token = error.response.headers['x-transmission-session-id'];
+            return axiosApiInstance(originalRequest);
+          } else {
+            return Promise.reject(error);
+          }
+        });
     }
 
+  }
 
-    /**
+
+  /**
      * Method name          | libtransmission function
      *    ---------------------+-------------------------------------------------
      *    "torrent-start"      | tr_torrentStart
@@ -90,122 +90,122 @@ export default class Client {
      *                   (3) a string, "recently-active", for recently-active torrents
      */
 
-    /**
+  /**
      *
      * @param ids
      */
-    async startTorrent(ids:number|Array<number>) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-start',
-                    'arguments': {
-                        'ids': ids
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async startTorrent(ids:number|Array<number>) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-start',
+          'arguments': {
+            'ids': ids
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *
      * @param ids
      */
-    async startTorrentNow(ids:number|Array<number>) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-start-now',
-                    'arguments': {
-                        'ids': ids
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async startTorrentNow(ids:number|Array<number>) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-start-now',
+          'arguments': {
+            'ids': ids
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *
      * @param ids
      */
-    async stopTorrent(ids:number|Array<number>) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-stop',
-                    'arguments': {
-                        'ids': ids
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async stopTorrent(ids:number|Array<number>) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-stop',
+          'arguments': {
+            'ids': ids
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *
      * @param ids
      */
-    async verifyTorrent(ids:number|Array<number>) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-verify',
-                    'arguments': {
-                        'ids': ids
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async verifyTorrent(ids:number|Array<number>) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-verify',
+          'arguments': {
+            'ids': ids
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *
      * @param ids
      */
-    async reannounceTorrent(ids:number|Array<number>) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-reannounce',
-                    'arguments': {
-                        'ids': ids
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async reannounceTorrent(ids:number|Array<number>) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-reannounce',
+          'arguments': {
+            'ids': ids
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *  Method name: "torrent-set"
      *
      *    Request arguments:
@@ -242,27 +242,27 @@ export default class Client {
      *
      *    Response arguments: none
      */
-    async setTorrent(parameters:TorrentParameters, ids:number|Array<number>) {
-        if (parameters.ids === undefined) {
-            parameters.ids = ids;
-        }
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-set',
-                    'arguments': JSON.stringify(parameters),
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
-        });
+  async setTorrent(parameters:TorrentParameters, ids:number|Array<number>) {
+    if (parameters.ids === undefined) {
+      parameters.ids = ids;
     }
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-set',
+          'arguments': JSON.stringify(parameters),
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
+        });
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *    Request arguments:
      *
      *    (1) An optional "ids" array as described in 3.1.
@@ -292,31 +292,31 @@ export default class Client {
      *
      *    List of all fields can be found at src/util/util::TORRENT_FILES
      */
-    async getAllTorrents() : Promise<Torrent[]> {
-        return new Promise<Torrent[]>((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-get',
-                    'arguments': {
-                        'fields': TORRENT_FIELDS,
-                    },
-                }).then((response) => {
-                    const objArray : Record<string, unknown>[] = response.data.arguments.torrents;
-                    const typedArray : Torrent[] = [];
-                    for (let i = 0; i < objArray.length; i++) {
-                        typedArray.push(new Torrent(objArray[i]));
-                    }
-                    resolve(typedArray);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async getAllTorrents() : Promise<Torrent[]> {
+    return new Promise<Torrent[]>((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-get',
+          'arguments': {
+            'fields': TORRENT_FIELDS,
+          },
+        }).then((response) => {
+          const objArray : Record<string, unknown>[] = response.data.arguments.torrents;
+          const typedArray : Torrent[] = [];
+          for (let i = 0; i < objArray.length; i++) {
+            typedArray.push(new Torrent(objArray[i]));
+          }
+          resolve(typedArray);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *   Request arguments:
      *
      *    key                  | value type & description
@@ -350,24 +350,24 @@ export default class Client {
      *                        a "torrent-duplicate" object in the same form.
      *
      */
-    async addTorrent(torrentDesc:NewTorrentDescriptor) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-add',
-                    'arguments': JSON.stringify(torrentDesc),
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async addTorrent(torrentDesc:NewTorrentDescriptor) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-add',
+          'arguments': JSON.stringify(torrentDesc),
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *   Request arguments:
      *
      *    string                     | value type & description
@@ -377,27 +377,27 @@ export default class Client {
      *
      *    Response arguments: none
      */
-    async removeTorrent(ids:number|Array<number>, deleteLocalData:boolean) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-remove',
-                    'arguments': {
-                        'ids': ids,
-                        'delete-local-data': deleteLocalData
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async removeTorrent(ids:number|Array<number>, deleteLocalData:boolean) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-remove',
+          'arguments': {
+            'ids': ids,
+            'delete-local-data': deleteLocalData
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *
      *    Request arguments:
      *
@@ -411,28 +411,28 @@ export default class Client {
      *
      *    Response arguments: none
      */
-    async moveTorrent(ids:number|Array<number>, location:string, move = false) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-move',
-                    'arguments': {
-                        'ids': ids,
-                        'location': location,
-                        'move': move
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async moveTorrent(ids:number|Array<number>, location:string, move = false) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-move',
+          'arguments': {
+            'ids': ids,
+            'location': location,
+            'move': move
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *    For more information on the use of this function, see the transmission.h
      *    documentation of tr_torrentRenamePath(). In particular, note that if this
      *    call succeeds you'll want to update the torrent's "files" and "name" field
@@ -449,28 +449,28 @@ export default class Client {
      *
      *    Response arguments: "path", "name", and "id", holding the torrent ID integer
      */
-    async renameTorrentPath(ids:number|Array<number>, path:string, name:string) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-rename-path',
-                    'arguments': {
-                        'ids': ids,
-                        'path': path,
-                        'name': name
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async renameTorrentPath(ids:number|Array<number>, path:string, name:string) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-rename-path',
+          'arguments': {
+            'ids': ids,
+            'path': path,
+            'name': name
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *
      *    Request arguments: one or more of SessionConfig's properties, except: "blocklist-size",
      *                       "config-dir", "rpc-version", "rpc-version-minimum",
@@ -478,45 +478,45 @@ export default class Client {
      *                       Note, every property present will be overwritten.
      *    Response arguments: none
      */
-    async sessionSet(sessionConfig:SessionConfig) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'session-set',
-                    'arguments': JSON.stringify(sessionConfig),
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async sessionSet(sessionConfig:SessionConfig) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'session-set',
+          'arguments': JSON.stringify(sessionConfig),
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      * Request arguments: an optional "fields" array of keys (see 4.1)
      * Response arguments: key/value pairs matching the request's "fields"
      *   argument if present, or all supported fields (see 4.1) otherwise.
      */
-    async sessionGet() {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'session-get',
-                }).then((response) => {
-                    resolve(response.data);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async sessionGet() {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'session-get',
+        }).then((response) => {
+          resolve(response.data);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *    Request arguments: none
      *
      *    Response arguments:
@@ -545,92 +545,92 @@ export default class Client {
      *                               | sessionCount     | number     | tr_session_stats
      *                               | secondsActive    | number     | tr_session_stats
      */
-    async sessionStats() {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'session-stats',
-                    'arguments': {},
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async sessionStats() {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'session-stats',
+          'arguments': {},
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *    Request arguments: none
      *    Response arguments: a number "blocklist-size"
      */
-    async blocklistUpdate() {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'blocklist-update',
-                    'arguments': {},
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async blocklistUpdate() {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'blocklist-update',
+          'arguments': {},
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *    This method tests to see if your incoming peer port is accessible
      *    from the outside world.
      *
      *    Request arguments: none
      *    Response arguments: a bool, "port-is-open"
      */
-    async portTest() {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'port-test',
-                    'arguments': {},
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async portTest() {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'port-test',
+          'arguments': {},
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *    This method tells the transmission session to shut down.
      *
      *    Request arguments: none
      *    Response arguments: none
      */
-    async sessionClose() {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'session-close',
-                    'arguments': {},
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async sessionClose() {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'session-close',
+          'arguments': {},
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      * Request arguments:
      *
      *    string      | value type & description
@@ -639,26 +639,26 @@ export default class Client {
      *
      *    Response arguments: none
      */
-    async queueMove(ids:number|Array<number>, to:QUEUE) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-' + to,
-                    'arguments': {
-                        'ids': ids
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async queueMove(ids:number|Array<number>, to:QUEUE) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-' + to,
+          'arguments': {
+            'ids': ids
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 
-    /**
+  /**
      *    This method tests how much free space is available in a
      *    client-specified folder.
      *
@@ -676,22 +676,22 @@ export default class Client {
      *    "size-bytes" | number  the size, in bytes, of the free space in that directory
      *    "total_size" | number  the total capacity, in bytes, of that directory
      */
-    async freeSpace(path:string) {
-        return new Promise((resolve, reject) => {
-            if (this.client !== undefined) {
-                this.client.post(this.connection.rpc_path, {
-                    'method': 'torrent-move',
-                    'arguments': {
-                        'path': path
-                    },
-                }).then((response) => {
-                    resolve(response.data.arguments.torrents);
-                }).catch((error) => {
-                    reject(error);
-                });
-            } else {
-                reject('Client is undefined');
-            }
+  async freeSpace(path:string) {
+    return new Promise((resolve, reject) => {
+      if (this.client !== undefined) {
+        this.client.post(this.connection.rpc_path, {
+          'method': 'torrent-move',
+          'arguments': {
+            'path': path
+          },
+        }).then((response) => {
+          resolve(response.data.arguments.torrents);
+        }).catch((error) => {
+          reject(error);
         });
-    }
+      } else {
+        reject('Client is undefined');
+      }
+    });
+  }
 }

@@ -4,65 +4,65 @@
  * @interface Connection
  */
 export default class Connection {
-    name: string;
-    /**
+  name: string;
+  /**
      * 
      * @type {string}
      * @memberof Connection
      */
-    url: string;
-    /**
+  url: string;
+  /**
      * 
      * @type {number}
      * @memberof Connection
      */
-    port: number;
-    /**
+  port: number;
+  /**
      * 
      * @type {string}
      * @memberof Connection
      */
-    rpc_path: string;
-    /**
+  rpc_path: string;
+  /**
      * 
      * @type {boolean}
      * @memberof Connection
      */
-    auth_required: boolean;
-    /**
+  auth_required: boolean;
+  /**
      * 
      * @type {string}
      * @memberof Connection
      */
-    username: string;
-    /**
+  username: string;
+  /**
      * 
      * @type {string}
      * @memberof Connection
      */
-    password: string;
-    /**
+  password: string;
+  /**
      *
      * @type {string}
      * @memberof Connection
      */
-    csrf_token?: string;
+  csrf_token?: string;
 
-    constructor(
-        name: string,
-        url: string,
-        port: number,
-        rpc_path: string,
-        auth_required: boolean,
-        username: string,
-        password: string
-    ) {
-        this.name = name,
-        this.url = url,
-        this.port = port,
-        this.rpc_path = rpc_path,
-        this.auth_required = auth_required,
-        this.username = username,
-        this.password = password;
-    }
+  constructor(
+    name: string,
+    url: string,
+    port: number,
+    rpc_path: string,
+    auth_required: boolean,
+    username: string,
+    password: string
+  ) {
+    this.name = name,
+    this.url = url,
+    this.port = port,
+    this.rpc_path = rpc_path,
+    this.auth_required = auth_required,
+    this.username = username,
+    this.password = password;
+  }
 }

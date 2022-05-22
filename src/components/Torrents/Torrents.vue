@@ -13,10 +13,10 @@ import TorrentsList from './TorrentsList.vue';
 import TorrentDetail from './TorrentDetail.vue';
 
 export default defineComponent({
-    name: 'Torrents',
-    components: {
-        TorrentsList,
-        TorrentDetail
-    }
+  name: 'Torrents',
+  components: {
+    TorrentsList,
+    TorrentDetail
+  }
 });
 </script>
